@@ -34,8 +34,8 @@ const Contact = () => {
     <section id="contact" className="py-24 sm:py-32 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, x: -30 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
@@ -74,6 +74,8 @@ const Contact = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
               className="group inline-flex items-center gap-3 font-mono text-sm text-secondary-foreground border border-border rounded-sm px-5 py-3 hover:border-primary hover:text-primary transition-all duration-200"
             >
               <span className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -86,7 +88,12 @@ const Contact = () => {
       </div>
 
       {/* Footer */}
-      <div className="container mx-auto px-6 mt-24 pt-8 border-t border-border">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="container mx-auto px-6 mt-24 pt-8 border-t border-border"
+      >
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="font-mono text-xs text-muted-foreground">
             © {new Date().getFullYear()} Bogdan Vujić. Built with React & passion.
@@ -95,7 +102,7 @@ const Contact = () => {
             Belgrade, Serbia 🇷🇸
           </span>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

@@ -31,8 +31,8 @@ const Testimonials = () => {
     <section id="testimonials" className="py-24 sm:py-32 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, x: -30 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
@@ -54,16 +54,26 @@ const Testimonials = () => {
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + i * 0.15 }}
-              className="bg-card border border-border rounded-sm p-6 relative group hover-lift"
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              transition={{ duration: 0.5, delay: 0.2 + i * 0.15, ease: "easeOut" }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              className="bg-card border border-border rounded-sm p-6 relative group"
             >
-              <Quote size={20} className="text-primary/30 mb-4" />
-              <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-6 italic">
+              {/* Hover glow */}
+              <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none glow-accent" />
+
+              <motion.div
+                initial={{ rotate: 0 }}
+                whileHover={{ rotate: 12, scale: 1.1 }}
+                className="inline-block"
+              >
+                <Quote size={20} className="text-primary/30 mb-4" />
+              </motion.div>
+              <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-6 italic relative z-10">
                 "{t.quote}"
               </p>
-              <div className="border-t border-border pt-4">
+              <div className="border-t border-border pt-4 relative z-10">
                 <div className="font-display text-sm font-semibold text-foreground">
                   {t.name}
                 </div>
