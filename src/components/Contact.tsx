@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Github, Linkedin, Mail, FileDown } from "lucide-react";
+import FloatingParticles from "./FloatingParticles";
 
 const Contact = () => {
   const ref = useRef(null);

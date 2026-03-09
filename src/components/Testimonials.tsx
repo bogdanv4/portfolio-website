@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Quote } from "lucide-react";
+import FloatingParticles from "./FloatingParticles";
 
 const testimonials = [
   {

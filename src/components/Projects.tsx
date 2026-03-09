@@ -1,6 +1,7 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ExternalLink, Github } from "lucide-react";
+import FloatingParticles from "./FloatingParticles";
 
 const projects = [
   {
