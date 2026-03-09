@@ -29,7 +29,12 @@ const Testimonials = () => {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="testimonials" className="py-24 sm:py-32 relative" ref={ref}>
+    <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden" ref={ref}>
+      <FloatingParticles particles={[
+        { top: "20%", left: "80%", size: "w-1.5 h-1.5", dur: 8, delay: 0 },
+        { top: "75%", left: "15%", size: "w-2 h-2", dur: 10, delay: 1 },
+        { top: "45%", left: "92%", size: "w-1 h-1", dur: 7, delay: 2.5 },
+      ]} />
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
