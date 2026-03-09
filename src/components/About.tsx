@@ -1,22 +1,42 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-const skills = [
-  { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-  { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-  { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-  { name: "Angular", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" },
-  { name: "HTML", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-  { name: "CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
-  { name: "SCSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" },
-  { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-  { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
-  { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-  { name: "Bootstrap", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
-  { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-  { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
-  { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" },
-  { name: "Ionic", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg" },
+const skillCategories = [
+  {
+    label: "Frontend",
+    skills: [
+      { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+      { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+      { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+      { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+      { name: "Angular", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" },
+      { name: "Redux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" },
+      { name: "SCSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" },
+      { name: "Ionic", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg" },
+    ],
+  },
+  {
+    label: "Backend",
+    skills: [
+      { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+      { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+    ],
+  },
+  {
+    label: "Database",
+    skills: [
+      { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+    ],
+  },
+  {
+    label: "Tools",
+    skills: [
+      { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+      { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+      { name: "Bootstrap", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
+      { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" },
+    ],
+  },
 ];
 
 const About = () => {
@@ -82,42 +102,50 @@ const About = () => {
             </motion.div>
           </div>
 
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="font-mono text-sm text-muted-foreground mb-6 uppercase tracking-widest"
-            >
-              Tech Stack
-            </motion.h3>
-            <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
-              {skills.map((skill, i) => (
-                <motion.div
-                  key={skill.name}
-                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.3 + i * 0.05 }}
-                  whileHover={{ 
-                    y: -4, 
-                    borderColor: "hsl(72 100% 50% / 0.4)",
-                    transition: { duration: 0.2 } 
-                  }}
-                  className="group flex flex-col items-center gap-2 p-4 bg-secondary/50 border border-border rounded-sm cursor-default transition-colors duration-200 hover:bg-secondary"
-                >
-                  <img
-                    src={skill.icon}
-                    alt={skill.name}
-                    className="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
-                    loading="lazy"
-                    style={skill.name === "Express.js" ? { filter: "invert(1)" } : undefined}
-                  />
-                  <span className="font-mono text-[11px] text-muted-foreground group-hover:text-primary transition-colors duration-200">
-                    {skill.name}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
+          <div className="space-y-6">
+            {skillCategories.map((category, catIdx) => (
+              <motion.div
+                key={category.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.3 + catIdx * 0.1 }}
+              >
+                <h3 className="font-mono text-xs text-primary mb-3 uppercase tracking-widest">
+                  {category.label}
+                </h3>
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                  {category.skills.map((skill, i) => (
+                    <motion.div
+                      key={skill.name}
+                      initial={{ opacity: 0, y: 15, scale: 0.9 }}
+                      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                      transition={{ duration: 0.4, delay: 0.4 + catIdx * 0.1 + i * 0.04 }}
+                      whileHover={{
+                        y: -4,
+                        borderColor: "hsl(72 100% 50% / 0.4)",
+                        transition: { duration: 0.2 },
+                      }}
+                      className="group flex flex-col items-center gap-2 p-3 bg-secondary/50 border border-border rounded-sm cursor-default transition-colors duration-200 hover:bg-secondary"
+                    >
+                      <img
+                        src={skill.icon}
+                        alt={skill.name}
+                        className="w-7 h-7 transition-transform duration-300 group-hover:scale-110"
+                        loading="lazy"
+                        style={
+                          skill.name === "Express.js" || skill.name === "Next.js"
+                            ? { filter: "invert(1)" }
+                            : undefined
+                        }
+                      />
+                      <span className="font-mono text-[11px] text-muted-foreground group-hover:text-primary transition-colors duration-200">
+                        {skill.name}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
