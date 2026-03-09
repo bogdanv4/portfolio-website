@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Github, Linkedin, Mail, FileDown } from "lucide-react";
+import FloatingParticles from "./FloatingParticles";
 
 const Contact = () => {
   const ref = useRef(null);
@@ -31,7 +32,12 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-24 sm:py-32 relative" ref={ref}>
+    <section id="contact" className="py-24 sm:py-32 relative overflow-hidden" ref={ref}>
+      <FloatingParticles particles={[
+        { top: "10%", left: "85%", size: "w-1.5 h-1.5", dur: 9, delay: 0 },
+        { top: "60%", left: "10%", size: "w-2 h-2", dur: 7, delay: 1 },
+        { top: "80%", left: "60%", size: "w-1 h-1", dur: 11, delay: 2 },
+      ]} />
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, x: -30 }}

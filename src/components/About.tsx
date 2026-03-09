@@ -1,5 +1,6 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import FloatingParticles from "./FloatingParticles";
 
 const skillCategories = [
   {
@@ -13,6 +14,7 @@ const skillCategories = [
       { name: "Redux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" },
       { name: "SCSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" },
       { name: "Ionic", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg" },
+      { name: "Bootstrap", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
     ],
   },
   {
@@ -33,7 +35,6 @@ const skillCategories = [
     skills: [
       { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
       { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
-      { name: "Bootstrap", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
       { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" },
     ],
   },
@@ -45,10 +46,14 @@ const About = () => {
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const [activeTab, setActiveTab] = useState(0);
+
+  const activeCategory = skillCategories[activeTab];
 
   return (
     <section id="about" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
-      {/* Parallax background element */}
+      <FloatingParticles />
+
       <motion.div
         style={{ y: bgY }}
         className="absolute -right-20 top-0 w-[400px] h-[400px] rounded-full border border-primary/5 pointer-events-none"
@@ -102,51 +107,74 @@ const About = () => {
             </motion.div>
           </div>
 
-          <div className="space-y-6">
-            {skillCategories.map((category, catIdx) => (
-              <motion.div
-                key={category.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.3 + catIdx * 0.1 }}
-              >
-                <h3 className="font-mono text-xs text-primary mb-3 uppercase tracking-widest">
-                  {category.label}
-                </h3>
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                  {category.skills.map((skill, i) => (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            {/* Tabs */}
+            <div className="flex gap-1 mb-6 border-b border-border">
+              {skillCategories.map((cat, idx) => (
+                <button
+                  key={cat.label}
+                  onClick={() => setActiveTab(idx)}
+                  className={`font-mono text-xs uppercase tracking-widest px-4 py-2.5 transition-all duration-200 relative ${
+                    activeTab === idx
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {cat.label}
+                  {activeTab === idx && (
                     <motion.div
-                      key={skill.name}
-                      initial={{ opacity: 0, y: 15, scale: 0.9 }}
-                      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                      transition={{ duration: 0.4, delay: 0.4 + catIdx * 0.1 + i * 0.04 }}
-                      whileHover={{
-                        y: -4,
-                        borderColor: "hsl(72 100% 50% / 0.4)",
-                        transition: { duration: 0.2 },
-                      }}
-                      className="group flex flex-col items-center gap-2 p-3 bg-secondary/50 border border-border rounded-sm cursor-default transition-colors duration-200 hover:bg-secondary"
-                    >
-                      <img
-                        src={skill.icon}
-                        alt={skill.name}
-                        className="w-7 h-7 transition-transform duration-300 group-hover:scale-110"
-                        loading="lazy"
-                        style={
-                          skill.name === "Express.js" || skill.name === "Next.js"
-                            ? { filter: "invert(1)" }
-                            : undefined
-                        }
-                      />
-                      <span className="font-mono text-[11px] text-muted-foreground group-hover:text-primary transition-colors duration-200">
-                        {skill.name}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                      layoutId="activeTab"
+                      className="absolute bottom-0 left-0 right-0 h-px bg-primary"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Skills grid */}
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-3 sm:grid-cols-4 gap-3"
+            >
+              {activeCategory.skills.map((skill, i) => (
+                <motion.div
+                  key={skill.name}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
+                  whileHover={{
+                    y: -4,
+                    borderColor: "hsl(72 100% 50% / 0.4)",
+                    transition: { duration: 0.2 },
+                  }}
+                  className="group flex flex-col items-center gap-2 p-4 bg-secondary/50 border border-border rounded-sm cursor-default transition-colors duration-200 hover:bg-secondary"
+                >
+                  <img
+                    src={skill.icon}
+                    alt={skill.name}
+                    className="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
+                    loading="lazy"
+                    style={
+                      skill.name === "Express.js" || skill.name === "Next.js" || skill.name === "WordPress"
+                        ? { filter: "invert(1)" }
+                        : undefined
+                    }
+                  />
+                  <span className="font-mono text-[11px] text-muted-foreground group-hover:text-primary transition-colors duration-200">
+                    {skill.name}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

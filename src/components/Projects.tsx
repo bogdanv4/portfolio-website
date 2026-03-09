@@ -1,6 +1,7 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ExternalLink, Github } from "lucide-react";
+import FloatingParticles from "./FloatingParticles";
 
 const projects = [
   {
@@ -38,6 +39,12 @@ const Projects = () => {
 
   return (
     <section id="projects" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
+      <FloatingParticles particles={[
+        { top: "10%", left: "90%", size: "w-2 h-2", dur: 9, delay: 0 },
+        { top: "60%", left: "5%", size: "w-1.5 h-1.5", dur: 7, delay: 1.5 },
+        { top: "85%", left: "70%", size: "w-1 h-1", dur: 11, delay: 2 },
+        { top: "30%", left: "50%", size: "w-1.5 h-1.5", dur: 8, delay: 0.5 },
+      ]} />
       {/* Parallax decorative line */}
       <motion.div
         style={{ x: bgX }}
