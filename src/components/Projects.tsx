@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ExternalLink, Github } from "lucide-react";
 
@@ -32,13 +32,22 @@ const projects = [
 const Projects = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const bgX = useTransform(scrollYProgress, [0, 1], [-40, 40]);
 
   return (
-    <section id="projects" className="py-24 sm:py-32 relative" ref={ref}>
-      <div className="container mx-auto px-6">
+    <section id="projects" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
+      {/* Parallax decorative line */}
+      <motion.div
+        style={{ x: bgX }}
+        className="absolute top-20 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent pointer-events-none"
+      />
+
+      <div className="container mx-auto px-6" ref={ref}>
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, x: -30 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
@@ -60,13 +69,16 @@ const Projects = () => {
           {projects.map((project, i) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + i * 0.15 }}
-              className="group relative bg-card border border-border rounded-sm p-6 hover-lift flex flex-col"
+              initial={{ opacity: 0, y: 50, rotateX: 8 }}
+              animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 + i * 0.15, ease: "easeOut" }}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className="group relative bg-card border border-border rounded-sm p-6 flex flex-col"
+              style={{ transformPerspective: 800 }}
             >
               {/* Glow on hover */}
-              <div className="absolute inset-0 rounded-sm bg-primary/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 rounded-sm bg-primary/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none glow-accent" />
 
               <div className="relative z-10 flex flex-col flex-1">
                 <div className="flex items-center justify-between mb-4">
@@ -74,20 +86,22 @@ const Projects = () => {
                     {project.title}
                   </h3>
                   <div className="flex gap-2">
-                    <a
+                    <motion.a
                       href={project.github}
+                      whileHover={{ scale: 1.2, rotate: 5 }}
                       className="text-muted-foreground hover:text-primary transition-colors"
                       aria-label="GitHub"
                     >
                       <Github size={18} />
-                    </a>
-                    <a
+                    </motion.a>
+                    <motion.a
                       href={project.live}
+                      whileHover={{ scale: 1.2, rotate: -5 }}
                       className="text-muted-foreground hover:text-primary transition-colors"
                       aria-label="Live Demo"
                     >
                       <ExternalLink size={18} />
-                    </a>
+                    </motion.a>
                   </div>
                 </div>
 

@@ -1,23 +1,43 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 const skills = [
-  "JavaScript", "TypeScript", "React", "Angular", "HTML", "CSS", "SCSS",
-  "Node.js", "Express.js", "MongoDB", "Bootstrap", "Ionic", "Git",
-  "Figma", "SCRUM", "WordPress",
+  { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+  { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+  { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+  { name: "Angular", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" },
+  { name: "HTML", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
+  { name: "CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
+  { name: "SCSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" },
+  { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+  { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+  { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+  { name: "Bootstrap", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
+  { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+  { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+  { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" },
+  { name: "Ionic", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg" },
 ];
 
 const About = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   return (
-    <section id="about" className="py-24 sm:py-32 relative" ref={ref}>
-      <div className="container mx-auto px-6">
+    <section id="about" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
+      {/* Parallax background element */}
+      <motion.div
+        style={{ y: bgY }}
+        className="absolute -right-20 top-0 w-[400px] h-[400px] rounded-full border border-primary/5 pointer-events-none"
+      />
+
+      <div className="container mx-auto px-6" ref={ref}>
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, x: -30 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
@@ -71,37 +91,33 @@ const About = () => {
             >
               Tech Stack
             </motion.h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
               {skills.map((skill, i) => (
-                <motion.span
-                  key={skill}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.3, delay: 0.3 + i * 0.04 }}
-                  className="font-mono text-xs px-3 py-1.5 bg-secondary text-secondary-foreground border border-border rounded-sm hover:border-primary/50 hover:text-primary transition-colors duration-200 cursor-default"
+                <motion.div
+                  key={skill.name}
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                  transition={{ duration: 0.4, delay: 0.3 + i * 0.05 }}
+                  whileHover={{ 
+                    y: -4, 
+                    borderColor: "hsl(72 100% 50% / 0.4)",
+                    transition: { duration: 0.2 } 
+                  }}
+                  className="group flex flex-col items-center gap-2 p-4 bg-secondary/50 border border-border rounded-sm cursor-default transition-colors duration-200 hover:bg-secondary"
                 >
-                  {skill}
-                </motion.span>
+                  <img
+                    src={skill.icon}
+                    alt={skill.name}
+                    className="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
+                    loading="lazy"
+                    style={skill.name === "Express.js" ? { filter: "invert(1)" } : undefined}
+                  />
+                  <span className="font-mono text-[11px] text-muted-foreground group-hover:text-primary transition-colors duration-200">
+                    {skill.name}
+                  </span>
+                </motion.div>
               ))}
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-10 grid grid-cols-3 gap-4"
-            >
-              {[
-                { value: "BSc", label: "Degree" },
-                { value: "3+", label: "Internships" },
-                { value: "1yr", label: "Teaching" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center p-4 bg-secondary/50 rounded-sm border border-border">
-                  <div className="font-display text-2xl font-bold text-primary">{stat.value}</div>
-                  <div className="font-mono text-xs text-muted-foreground mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
           </div>
         </div>
       </div>
