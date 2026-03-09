@@ -102,42 +102,50 @@ const About = () => {
             </motion.div>
           </div>
 
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="font-mono text-sm text-muted-foreground mb-6 uppercase tracking-widest"
-            >
-              Tech Stack
-            </motion.h3>
-            <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
-              {skills.map((skill, i) => (
-                <motion.div
-                  key={skill.name}
-                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.3 + i * 0.05 }}
-                  whileHover={{ 
-                    y: -4, 
-                    borderColor: "hsl(72 100% 50% / 0.4)",
-                    transition: { duration: 0.2 } 
-                  }}
-                  className="group flex flex-col items-center gap-2 p-4 bg-secondary/50 border border-border rounded-sm cursor-default transition-colors duration-200 hover:bg-secondary"
-                >
-                  <img
-                    src={skill.icon}
-                    alt={skill.name}
-                    className="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
-                    loading="lazy"
-                    style={skill.name === "Express.js" ? { filter: "invert(1)" } : undefined}
-                  />
-                  <span className="font-mono text-[11px] text-muted-foreground group-hover:text-primary transition-colors duration-200">
-                    {skill.name}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
+          <div className="space-y-6">
+            {skillCategories.map((category, catIdx) => (
+              <motion.div
+                key={category.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.3 + catIdx * 0.1 }}
+              >
+                <h3 className="font-mono text-xs text-primary mb-3 uppercase tracking-widest">
+                  {category.label}
+                </h3>
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                  {category.skills.map((skill, i) => (
+                    <motion.div
+                      key={skill.name}
+                      initial={{ opacity: 0, y: 15, scale: 0.9 }}
+                      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                      transition={{ duration: 0.4, delay: 0.4 + catIdx * 0.1 + i * 0.04 }}
+                      whileHover={{
+                        y: -4,
+                        borderColor: "hsl(72 100% 50% / 0.4)",
+                        transition: { duration: 0.2 },
+                      }}
+                      className="group flex flex-col items-center gap-2 p-3 bg-secondary/50 border border-border rounded-sm cursor-default transition-colors duration-200 hover:bg-secondary"
+                    >
+                      <img
+                        src={skill.icon}
+                        alt={skill.name}
+                        className="w-7 h-7 transition-transform duration-300 group-hover:scale-110"
+                        loading="lazy"
+                        style={
+                          skill.name === "Express.js" || skill.name === "Next.js"
+                            ? { filter: "invert(1)" }
+                            : undefined
+                        }
+                      />
+                      <span className="font-mono text-[11px] text-muted-foreground group-hover:text-primary transition-colors duration-200">
+                        {skill.name}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
