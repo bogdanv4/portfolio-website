@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Github, Linkedin, Mail, FileDown } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
@@ -6,6 +6,10 @@ import FloatingParticles from "./FloatingParticles";
 const Contact = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const headingScale = useTransform(scrollYProgress, [0, 0.4], [0.85, 1]);
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   const links = [
     {
@@ -32,13 +36,9 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-24 sm:py-32 relative overflow-hidden" ref={ref}>
-      <FloatingParticles particles={[
-        { top: "10%", left: "85%", size: "w-1.5 h-1.5", dur: 9, delay: 0 },
-        { top: "60%", left: "10%", size: "w-2 h-2", dur: 7, delay: 1 },
-        { top: "80%", left: "60%", size: "w-1 h-1", dur: 11, delay: 2 },
-      ]} />
-      <div className="container mx-auto px-6">
+    <section id="contact" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
+      <FloatingParticles />
+      <div className="container mx-auto px-6" ref={ref}>
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -51,10 +51,8 @@ const Contact = () => {
         </motion.div>
 
         <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display text-3xl sm:text-5xl font-bold mb-4 tracking-tight"
+          style={{ scale: headingScale, opacity: headingOpacity }}
+          className="font-display text-3xl sm:text-5xl font-bold mb-4 tracking-tight origin-left"
         >
           Let's work together<span className="text-primary">.</span>
         </motion.h2>
@@ -77,10 +75,10 @@ const Contact = () => {
               download={link.download || undefined}
               target={link.download ? undefined : "_blank"}
               rel={link.download ? undefined : "noopener noreferrer"}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-              whileHover={{ scale: 1.03, y: -2 }}
+              initial={{ opacity: 0, x: -30 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.3 + i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
+              whileHover={{ scale: 1.05, y: -3 }}
               whileTap={{ scale: 0.97 }}
               className="group inline-flex items-center gap-3 font-mono text-sm text-secondary-foreground border border-border rounded-sm px-5 py-3 hover:border-primary hover:text-primary transition-all duration-200"
             >

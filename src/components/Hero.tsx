@@ -42,7 +42,7 @@ const Hero = () => {
           className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] border border-primary/[0.07] rounded-full"
         />
 
-        {/* Floating particles */}
+        {/* Floating particles - more of them */}
         {[
           { top: "15%", left: "10%", size: "w-3 h-3", dur: 8, delay: 0 },
           { top: "70%", left: "85%", size: "w-2 h-2", dur: 6, delay: 1 },
@@ -50,6 +50,12 @@ const Hero = () => {
           { top: "25%", left: "75%", size: "w-2 h-2", dur: 7, delay: 0.5 },
           { top: "80%", left: "25%", size: "w-1 h-1", dur: 9, delay: 3 },
           { top: "40%", left: "90%", size: "w-2.5 h-2.5", dur: 11, delay: 1.5 },
+          { top: "10%", left: "50%", size: "w-1.5 h-1.5", dur: 8, delay: 0.8 },
+          { top: "60%", left: "40%", size: "w-1 h-1", dur: 12, delay: 2.5 },
+          { top: "35%", left: "15%", size: "w-2 h-2", dur: 9, delay: 1.2 },
+          { top: "90%", left: "65%", size: "w-1.5 h-1.5", dur: 7, delay: 3.5 },
+          { top: "5%", left: "80%", size: "w-1 h-1", dur: 10, delay: 0.3 },
+          { top: "55%", left: "60%", size: "w-2 h-2", dur: 8, delay: 2.2 },
         ].map((p, i) => (
           <motion.div
             key={i}

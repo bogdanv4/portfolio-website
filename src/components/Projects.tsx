@@ -36,15 +36,13 @@ const Projects = () => {
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const bgX = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const headingX = useTransform(scrollYProgress, [0, 0.5], [-60, 0]);
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
     <section id="projects" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
-      <FloatingParticles particles={[
-        { top: "10%", left: "90%", size: "w-2 h-2", dur: 9, delay: 0 },
-        { top: "60%", left: "5%", size: "w-1.5 h-1.5", dur: 7, delay: 1.5 },
-        { top: "85%", left: "70%", size: "w-1 h-1", dur: 11, delay: 2 },
-        { top: "30%", left: "50%", size: "w-1.5 h-1.5", dur: 8, delay: 0.5 },
-      ]} />
+      <FloatingParticles />
+
       {/* Parallax decorative line */}
       <motion.div
         style={{ x: bgX }}
@@ -53,9 +51,7 @@ const Projects = () => {
 
       <div className="container mx-auto px-6" ref={ref}>
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          style={{ x: headingX, opacity: headingOpacity }}
           className="mb-4"
         >
           <span className="font-mono text-sm text-primary tracking-widest uppercase">
@@ -76,10 +72,10 @@ const Projects = () => {
           {projects.map((project, i) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 50, rotateX: 8 }}
+              initial={{ opacity: 0, y: 60, rotateX: 10 }}
               animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + i * 0.15, ease: "easeOut" }}
-              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              transition={{ duration: 0.7, delay: 0.2 + i * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
               className="group relative bg-card border border-border rounded-sm p-6 flex flex-col"
               style={{ transformPerspective: 800 }}
             >
