@@ -1,7 +1,8 @@
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
+import ScrollReveal from "./ScrollReveal";
 
 const projects = [
   {
@@ -31,99 +32,85 @@ const projects = [
 ];
 
 const Projects = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const bgX = useTransform(scrollYProgress, [0, 1], [-40, 40]);
-  const headingX = useTransform(scrollYProgress, [0, 0.5], [-60, 0]);
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
     <section id="projects" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
       <FloatingParticles />
 
-      {/* Parallax decorative line */}
       <motion.div
         style={{ x: bgX }}
         className="absolute top-20 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent pointer-events-none"
       />
 
-      <div className="container mx-auto px-6" ref={ref}>
-        <motion.div
-          style={{ x: headingX, opacity: headingOpacity }}
-          className="mb-4"
-        >
-          <span className="font-mono text-sm text-primary tracking-widest uppercase">
+      <div className="container mx-auto px-6">
+        <ScrollReveal direction="left">
+          <span className="font-mono text-sm text-primary tracking-widest uppercase mb-4 block">
             // Projects
           </span>
-        </motion.div>
+        </ScrollReveal>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display text-3xl sm:text-4xl font-bold mb-12 tracking-tight"
-        >
-          Selected Work<span className="text-primary">.</span>
-        </motion.h2>
+        <ScrollReveal delay={0.1}>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-12 tracking-tight">
+            Selected Work<span className="text-primary">.</span>
+          </h2>
+        </ScrollReveal>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 60, rotateX: 10 }}
-              animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.2 + i * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
-              className="group relative bg-card border border-border rounded-sm p-6 flex flex-col"
-              style={{ transformPerspective: 800 }}
-            >
-              {/* Glow on hover */}
-              <div className="absolute inset-0 rounded-sm bg-primary/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none glow-accent" />
+            <ScrollReveal key={project.title} delay={0.2 + i * 0.15}>
+              <motion.div
+                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
+                className="group relative bg-card border border-border rounded-sm p-6 flex flex-col h-full"
+                style={{ transformPerspective: 800 }}
+              >
+                <div className="absolute inset-0 rounded-sm bg-primary/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none glow-accent" />
 
-              <div className="relative z-10 flex flex-col flex-1">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-display text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200">
-                    {project.title}
-                  </h3>
-                  <div className="flex gap-2">
-                    <motion.a
-                      href={project.github}
-                      whileHover={{ scale: 1.2, rotate: 5 }}
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                      aria-label="GitHub"
-                    >
-                      <Github size={18} />
-                    </motion.a>
-                    <motion.a
-                      href={project.live}
-                      whileHover={{ scale: 1.2, rotate: -5 }}
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                      aria-label="Live Demo"
-                    >
-                      <ExternalLink size={18} />
-                    </motion.a>
+                <div className="relative z-10 flex flex-col flex-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-display text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200">
+                      {project.title}
+                    </h3>
+                    <div className="flex gap-2">
+                      <motion.a
+                        href={project.github}
+                        whileHover={{ scale: 1.2, rotate: 5 }}
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                        aria-label="GitHub"
+                      >
+                        <Github size={18} />
+                      </motion.a>
+                      <motion.a
+                        href={project.live}
+                        whileHover={{ scale: 1.2, rotate: -5 }}
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                        aria-label="Live Demo"
+                      >
+                        <ExternalLink size={18} />
+                      </motion.a>
+                    </div>
+                  </div>
+
+                  <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-6 flex-1">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 mt-auto">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="font-mono text-[10px] px-2 py-0.5 bg-secondary text-muted-foreground rounded-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
-
-                <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-6 flex-1">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-1.5 mt-auto">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[10px] px-2 py-0.5 bg-secondary text-muted-foreground rounded-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

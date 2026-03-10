@@ -1,11 +1,10 @@
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Github, Linkedin, Mail, FileDown } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
+import ScrollReveal from "./ScrollReveal";
 
 const Contact = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const headingScale = useTransform(scrollYProgress, [0, 0.4], [0.85, 1]);
@@ -38,17 +37,12 @@ const Contact = () => {
   return (
     <section id="contact" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
       <FloatingParticles />
-      <div className="container mx-auto px-6" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-4"
-        >
-          <span className="font-mono text-sm text-primary tracking-widest uppercase">
+      <div className="container mx-auto px-6">
+        <ScrollReveal direction="left">
+          <span className="font-mono text-sm text-primary tracking-widest uppercase mb-4 block">
             // Contact
           </span>
-        </motion.div>
+        </ScrollReveal>
 
         <motion.h2
           style={{ scale: headingScale, opacity: headingOpacity }}
@@ -57,56 +51,48 @@ const Contact = () => {
           Let's work together<span className="text-primary">.</span>
         </motion.h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="font-body text-lg text-secondary-foreground max-w-xl mb-12"
-        >
-          I'm actively looking for my next opportunity. Whether you have a role in mind
-          or just want to say hello — my inbox is always open.
-        </motion.p>
+        <ScrollReveal delay={0.2}>
+          <p className="font-body text-lg text-secondary-foreground max-w-xl mb-12">
+            I'm actively looking for my next opportunity. Whether you have a role in mind
+            or just want to say hello — my inbox is always open.
+          </p>
+        </ScrollReveal>
 
         <div className="flex flex-col sm:flex-row flex-wrap gap-4">
           {links.map((link, i) => (
-            <motion.a
-              key={link.label}
-              href={link.href}
-              download={link.download || undefined}
-              target={link.download ? undefined : "_blank"}
-              rel={link.download ? undefined : "noopener noreferrer"}
-              initial={{ opacity: 0, x: -30 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.3 + i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
-              whileHover={{ scale: 1.05, y: -3 }}
-              whileTap={{ scale: 0.97 }}
-              className="group inline-flex items-center gap-3 font-mono text-sm text-secondary-foreground border border-border rounded-sm px-5 py-3 hover:border-primary hover:text-primary transition-all duration-200"
-            >
-              <span className="text-muted-foreground group-hover:text-primary transition-colors">
-                {link.icon}
-              </span>
-              {link.label}
-            </motion.a>
+            <ScrollReveal key={link.label} direction="left" delay={0.3 + i * 0.1}>
+              <motion.a
+                href={link.href}
+                download={link.download || undefined}
+                target={link.download ? undefined : "_blank"}
+                rel={link.download ? undefined : "noopener noreferrer"}
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                className="group inline-flex items-center gap-3 font-mono text-sm text-secondary-foreground border border-border rounded-sm px-5 py-3 hover:border-primary hover:text-primary transition-all duration-200"
+              >
+                <span className="text-muted-foreground group-hover:text-primary transition-colors">
+                  {link.icon}
+                </span>
+                {link.label}
+              </motion.a>
+            </ScrollReveal>
           ))}
         </div>
       </div>
 
       {/* Footer */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6, delay: 0.8 }}
-        className="container mx-auto px-6 mt-24 pt-8 border-t border-border"
-      >
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="font-mono text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Bogdan Vujić. Built with React & passion.
-          </span>
-          <span className="font-mono text-xs text-muted-foreground">
-            Belgrade, Serbia 🇷🇸
-          </span>
+      <ScrollReveal delay={0.6}>
+        <div className="container mx-auto px-6 mt-24 pt-8 border-t border-border">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="font-mono text-xs text-muted-foreground">
+              © {new Date().getFullYear()} Bogdan Vujić. Built with React & passion.
+            </span>
+            <span className="font-mono text-xs text-muted-foreground">
+              Belgrade, Serbia 🇷🇸
+            </span>
+          </div>
         </div>
-      </motion.div>
+      </ScrollReveal>
     </section>
   );
 };

@@ -1,6 +1,7 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import FloatingParticles from "./FloatingParticles";
+import ScrollReveal from "./ScrollReveal";
 
 const skillCategories = [
   {
@@ -43,12 +44,9 @@ const skillCategories = [
 ];
 
 const About = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const textReveal = useTransform(scrollYProgress, [0, 0.3], [0.3, 1]);
   const [activeTab, setActiveTab] = useState(0);
 
   const activeCategory = skillCategories[activeTab];
@@ -62,61 +60,46 @@ const About = () => {
         className="absolute -right-20 top-0 w-[400px] h-[400px] rounded-full border border-primary/5 pointer-events-none"
       />
 
-      <div className="container mx-auto px-6" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-4"
-        >
-          <span className="font-mono text-sm text-primary tracking-widest uppercase">
+      <div className="container mx-auto px-6">
+        <ScrollReveal direction="left">
+          <span className="font-mono text-sm text-primary tracking-widest uppercase mb-4 block">
             // About Me
           </span>
-        </motion.div>
+        </ScrollReveal>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left: text */}
           <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display text-3xl sm:text-4xl font-bold mb-6 tracking-tight"
-            >
-              I build things for the web
-              <span className="text-primary">.</span>
-            </motion.h2>
+            <ScrollReveal delay={0.1}>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold mb-6 tracking-tight">
+                I build things for the web
+                <span className="text-primary">.</span>
+              </h2>
+            </ScrollReveal>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-4 text-secondary-foreground font-body leading-relaxed"
-            >
-              <p>
-                I'm a frontend-focused Software Engineer with a degree in Information Systems
-                from the University of Belgrade. I enjoy translating complex ideas into clean,
-                intuitive interfaces that people actually want to use.
-              </p>
-              <p>
-                Currently working as a Software Engineer Intern at Grid Dynamics, building
-                React applications with Google SSO and interactive map visualizations. Previously,
-                I honed my skills at Ingsoftware and spent a year teaching web development
-                fundamentals at the Faculty of Organizational Sciences.
-              </p>
-              <p className="text-muted-foreground text-sm font-mono">
-                Fun fact: I've been on both sides of the classroom — teaching HTML to students
-                before I even landed my first dev job. That's commitment.
-              </p>
-            </motion.div>
+            <ScrollReveal delay={0.2}>
+              <div className="space-y-4 text-secondary-foreground font-body leading-relaxed">
+                <p>
+                  I'm a frontend-focused Software Engineer with a degree in Information Systems
+                  from the University of Belgrade. I enjoy translating complex ideas into clean,
+                  intuitive interfaces that people actually want to use.
+                </p>
+                <p>
+                  Currently working as a Software Engineer Intern at Grid Dynamics, building
+                  React applications with Google SSO and interactive map visualizations. Previously,
+                  I honed my skills at Ingsoftware and spent a year teaching web development
+                  fundamentals at the Faculty of Organizational Sciences.
+                </p>
+                <p className="text-muted-foreground text-sm font-mono">
+                  Fun fact: I've been on both sides of the classroom — teaching HTML to students
+                  before I even landed my first dev job. That's commitment.
+                </p>
+              </div>
+            </ScrollReveal>
           </div>
 
           {/* Right: tabbed tech stack */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
+          <ScrollReveal direction="right" delay={0.3}>
             {/* Tabs */}
             <div className="flex flex-wrap gap-1 mb-6 border-b border-border">
               {skillCategories.map((cat, idx) => (
@@ -179,7 +162,7 @@ const About = () => {
                 </motion.div>
               ))}
             </motion.div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
