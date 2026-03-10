@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Quote } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
@@ -27,19 +27,17 @@ const testimonials = [
 const Testimonials = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const headingX = useTransform(scrollYProgress, [0, 0.4], [80, 0]);
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
-    <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden" ref={ref}>
-      <FloatingParticles particles={[
-        { top: "20%", left: "80%", size: "w-1.5 h-1.5", dur: 8, delay: 0 },
-        { top: "75%", left: "15%", size: "w-2 h-2", dur: 10, delay: 1 },
-        { top: "45%", left: "92%", size: "w-1 h-1", dur: 7, delay: 2.5 },
-      ]} />
-      <div className="container mx-auto px-6">
+    <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
+      <FloatingParticles />
+      <div className="container mx-auto px-6" ref={ref}>
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          style={{ x: headingX, opacity: headingOpacity }}
           className="mb-4"
         >
           <span className="font-mono text-sm text-primary tracking-widest uppercase">
@@ -60,10 +58,10 @@ const Testimonials = () => {
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              initial={{ opacity: 0, y: 50, scale: 0.92 }}
               animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + i * 0.15, ease: "easeOut" }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              transition={{ duration: 0.6, delay: 0.2 + i * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.2 } }}
               className="bg-card border border-border rounded-sm p-6 relative group"
             >
               {/* Hover glow */}

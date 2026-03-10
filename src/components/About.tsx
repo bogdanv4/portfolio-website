@@ -36,6 +36,8 @@ const skillCategories = [
       { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
       { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
       { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" },
+      { name: "Lovable", icon: "https://lovable.dev/icon.svg" },
+      { name: "Cursor", icon: "https://www.cursor.com/favicon.ico" },
     ],
   },
 ];
@@ -46,6 +48,7 @@ const About = () => {
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const textReveal = useTransform(scrollYProgress, [0, 0.3], [0.3, 1]);
   const [activeTab, setActiveTab] = useState(0);
 
   const activeCategory = skillCategories[activeTab];
@@ -71,7 +74,8 @@ const About = () => {
           </span>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Left: text */}
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -107,18 +111,19 @@ const About = () => {
             </motion.div>
           </div>
 
+          {/* Right: tabbed tech stack */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             {/* Tabs */}
-            <div className="flex gap-1 mb-6 border-b border-border">
+            <div className="flex flex-wrap gap-1 mb-6 border-b border-border">
               {skillCategories.map((cat, idx) => (
                 <button
                   key={cat.label}
                   onClick={() => setActiveTab(idx)}
-                  className={`font-mono text-xs uppercase tracking-widest px-4 py-2.5 transition-all duration-200 relative ${
+                  className={`font-mono text-xs uppercase tracking-widest px-3 sm:px-4 py-2.5 transition-all duration-200 relative whitespace-nowrap ${
                     activeTab === idx
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
