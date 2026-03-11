@@ -87,8 +87,8 @@ const Contact = () => {
             <span className="font-mono text-xs text-muted-foreground">
               © {new Date().getFullYear()} Bogdan Vujić. Built with React & passion.
             </span>
-            <span className="font-mono text-xs text-muted-foreground">
-              Belgrade, Serbia 🇷🇸
+            <span className="font-mono text-xs text-muted-foreground flex items-center gap-1.5">
+              Serbia <span className="text-base leading-none">🇷🇸</span>
             </span>
           </div>
           <div className="flex justify-center mt-8">
