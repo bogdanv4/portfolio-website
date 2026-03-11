@@ -163,6 +163,7 @@ const About = () => {
                 </motion.div>
               ))}
             </motion.div>
+            </div>
           </ScrollReveal>
         </div>
       </div>
