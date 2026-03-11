@@ -88,7 +88,7 @@ const Contact = () => {
               © {new Date().getFullYear()} Bogdan Vujić. Built with React & passion.
             </span>
             <span className="font-mono text-xs text-muted-foreground flex items-center gap-1.5">
-              Serbia <img src="https://flagcdn.com/w20/rs.png" alt="Serbian flag" className="inline-block w-5 h-auto" />
+              Serbia <span className="text-base leading-none">🇷🇸</span>
             </span>
           </div>
           <div className="flex justify-center mt-8">
