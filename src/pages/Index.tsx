@@ -15,7 +15,7 @@ const Index = () => {
     <>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       <div className={`min-h-screen bg-background text-foreground ${loading ? "overflow-hidden h-screen" : ""}`}>
-        <LinkedInFloat />
+        
         <Navbar />
         <Hero />
         <About />
