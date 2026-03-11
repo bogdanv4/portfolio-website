@@ -6,7 +6,7 @@ import Projects from "@/components/Projects";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Preloader from "@/components/Preloader";
-import LinkedInFloat from "@/components/LinkedInFloat";
+
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
