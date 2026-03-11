@@ -91,6 +91,19 @@ const Contact = () => {
               Belgrade, Serbia 🇷🇸
             </span>
           </div>
+          <div className="flex justify-center mt-8">
+            <motion.button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group flex flex-col items-center gap-2 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              <span className="w-10 h-10 rounded-full border border-border group-hover:border-primary flex items-center justify-center transition-colors">
+                <ArrowUp size={16} />
+              </span>
+              Back to top
+            </motion.button>
+          </div>
         </div>
       </ScrollReveal>
     </section>
