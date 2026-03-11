@@ -22,7 +22,7 @@ const LinkedInFloat = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           whileHover={{ scale: 1.1 }}
-          className="fixed left-4 top-1/2 -translate-y-1/2 z-40 group flex flex-col items-center gap-3"
+          className="fixed left-4 top-1/2 -translate-y-1/2 z-40 group hidden lg:flex flex-col items-center gap-3"
         >
           {/* Vertical line */}
           <span className="w-px h-8 bg-border group-hover:bg-primary transition-colors" />
