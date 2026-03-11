@@ -101,12 +101,12 @@ const About = () => {
           {/* Right: tabbed tech stack */}
           <ScrollReveal direction="right" delay={0.3}>
             {/* Tabs */}
-            <div className="flex flex-wrap gap-1 mb-6 border-b border-border">
+            <div className="flex gap-0 mb-6 border-b border-border">
               {skillCategories.map((cat, idx) => (
                 <button
                   key={cat.label}
                   onClick={() => setActiveTab(idx)}
-                  className={`font-mono text-xs uppercase tracking-widest px-3 sm:px-4 py-2.5 transition-all duration-200 relative whitespace-nowrap ${
+                  className={`font-mono text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest px-2 sm:px-4 py-2.5 transition-all duration-200 relative whitespace-nowrap flex-1 sm:flex-none ${
                     activeTab === idx
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
