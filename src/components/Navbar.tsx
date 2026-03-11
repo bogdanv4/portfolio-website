@@ -78,7 +78,14 @@ const Navbar = () => {
                 <a
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMobileOpen(false);
+                    const target = document.querySelector(item.href);
+                    if (target) {
+                      setTimeout(() => target.scrollIntoView({ behavior: "smooth" }), 100);
+                    }
+                  }}
                   className="font-mono text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {item.label}
