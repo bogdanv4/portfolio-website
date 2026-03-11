@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Github, Linkedin, Mail, FileDown } from "lucide-react";
+import { Github, Linkedin, Mail, FileDown, ArrowUp } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
 import ScrollReveal from "./ScrollReveal";
 
