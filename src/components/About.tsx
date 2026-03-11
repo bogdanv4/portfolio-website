@@ -124,7 +124,8 @@ const About = () => {
               ))}
             </div>
 
-            {/* Skills grid */}
+            {/* Skills grid - fixed height based on Frontend (largest) */}
+            <div className="min-h-[280px] sm:min-h-[200px]">
             <motion.div
               key={activeTab}
               initial={{ opacity: 0, y: 10 }}
