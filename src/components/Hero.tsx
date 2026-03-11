@@ -126,7 +126,7 @@ const Hero = () => {
             className="font-body text-lg sm:text-xl text-secondary-foreground max-w-xl mb-10 leading-relaxed"
           >
             Crafting clean, responsive interfaces with React & TypeScript.
-            Based in Belgrade, building for the web.
+            Based in Serbia, building for the web.
           </motion.p>
 
           <motion.div
