@@ -47,13 +47,6 @@ const Projects = () => {
 
   return (
     <section id="projects" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
-      <FloatingParticles />
-
-      <motion.div
-        style={{ x: bgX }}
-        className="absolute top-20 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent pointer-events-none"
-      />
-
       <div className="container mx-auto px-6">
         <ScrollReveal direction="left">
           <span className="font-mono text-sm text-primary tracking-widest uppercase mb-4 block">
@@ -66,133 +59,133 @@ const Projects = () => {
             Selected Work<span className="text-primary">.</span>
           </h2>
         </ScrollReveal>
+      </div>
 
-        <ScrollReveal delay={0.2}>
-          <div className="flex gap-2 h-[420px] sm:h-[480px]">
-            {projects.map((project, i) => {
-              const isActive = activeIndex === i;
-              return (
+      <ScrollReveal delay={0.2}>
+        <div className="flex h-[500px] sm:h-[560px] w-full">
+          {projects.map((project, i) => {
+            const isActive = activeIndex === i;
+            const isFirst = i === 0;
+            const isLast = i === projects.length - 1;
+
+            // Build clip-path: first card has straight left edge, last has straight right edge
+            const leftTop = isFirst ? "0%" : "6%";
+            const rightBottom = isLast ? "100%" : "94%";
+            const clipPath = `polygon(${leftTop} 0%, 100% 0%, ${rightBottom} 100%, 0% 100%)`;
+
+            return (
+              <motion.div
+                key={project.title}
+                className="relative overflow-hidden cursor-pointer group"
+                animate={{
+                  flex: isActive ? 5 : 1,
+                }}
+                transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                onMouseEnter={() => setActiveIndex(i)}
+                style={{
+                  minWidth: 0,
+                  clipPath,
+                  marginLeft: isFirst ? 0 : "-3%",
+                }}
+              >
+                {/* Background */}
+                <div className="absolute inset-0 bg-card border-y border-border" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-card" />
+
+                {/* Glow on active */}
                 <motion.div
-                  key={project.title}
-                  className="relative overflow-hidden cursor-pointer border border-border group"
-                  animate={{
-                    flex: isActive ? 4 : 1,
-                  }}
-                  transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  onMouseEnter={() => setActiveIndex(i)}
+                  className="absolute inset-0 pointer-events-none"
+                  animate={{ opacity: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.15 }}
                   style={{
-                    minWidth: 0,
-                    clipPath: "polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%)",
+                    boxShadow: "inset 0 0 60px hsl(72 100% 50% / 0.04)",
                   }}
+                />
+
+                {/* Vertical title (collapsed state) */}
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center"
+                  animate={{ opacity: isActive ? 0 : 1 }}
+                  transition={{ duration: 0.15 }}
                 >
-                  {/* Background */}
-                  <div className="absolute inset-0 bg-card" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-
-                  {/* Diagonal accent line */}
-                  <motion.div
-                    className="absolute top-0 left-0 w-full h-full pointer-events-none"
-                    animate={{ opacity: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className="absolute top-0 left-[8%] w-px h-full bg-primary/30" style={{ transform: "rotate(0deg)" }} />
-                  </motion.div>
-
-                  {/* Glow on active */}
-                  <motion.div
-                    className="absolute inset-0 pointer-events-none"
-                    animate={{ opacity: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.2 }}
+                  <span
+                    className="font-display text-sm sm:text-base font-bold text-muted-foreground whitespace-nowrap tracking-wider"
                     style={{
-                      boxShadow: "inset 0 0 40px hsl(72 100% 50% / 0.06), 0 0 30px hsl(72 100% 50% / 0.08)",
+                      writingMode: "vertical-rl",
+                      textOrientation: "mixed",
+                      transform: "rotate(180deg)",
                     }}
-                  />
-
-                  {/* Vertical title (collapsed state) */}
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center"
-                    animate={{ opacity: isActive ? 0 : 1 }}
-                    transition={{ duration: 0.2 }}
                   >
-                    <span
-                      className="font-display text-sm sm:text-base font-bold text-muted-foreground whitespace-nowrap tracking-wider"
-                      style={{
-                        writingMode: "vertical-rl",
-                        textOrientation: "mixed",
-                        transform: "rotate(180deg)",
-                      }}
-                    >
+                    {project.title}
+                  </span>
+                </motion.div>
+
+                {/* Content (expanded state) */}
+                <motion.div
+                  className="absolute inset-0 flex flex-col justify-end p-8 sm:p-10"
+                  animate={{ opacity: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.2, delay: isActive ? 0.08 : 0 }}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground">
                       {project.title}
-                    </span>
-                  </motion.div>
-
-                  {/* Content (expanded state) */}
-                  <motion.div
-                    className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8"
-                    animate={{ opacity: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.28, delay: isActive ? 0.1 : 0 }}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground">
-                        {project.title}
-                      </h3>
-                      <div className="flex gap-2 ml-auto">
+                    </h3>
+                    <div className="flex gap-2 ml-auto">
+                      <motion.a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.2 }}
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                        aria-label="GitHub"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Github size={18} />
+                      </motion.a>
+                      {project.live && (
                         <motion.a
-                          href={project.github}
+                          href={project.live}
                           target="_blank"
                           rel="noopener noreferrer"
                           whileHover={{ scale: 1.2 }}
                           className="text-muted-foreground hover:text-primary transition-colors"
-                          aria-label="GitHub"
+                          aria-label="Live Demo"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <Github size={18} />
+                          <ExternalLink size={18} />
                         </motion.a>
-                        {project.live && (
-                          <motion.a
-                            href={project.live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.2 }}
-                            className="text-muted-foreground hover:text-primary transition-colors"
-                            aria-label="Live Demo"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <ExternalLink size={18} />
-                          </motion.a>
-                        )}
-                      </div>
+                      )}
                     </div>
+                  </div>
 
-                    <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-4 max-w-md">
-                      {project.description}
-                    </p>
+                  <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-4 max-w-md">
+                    {project.description}
+                  </p>
 
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="font-mono text-[10px] px-2 py-0.5 bg-secondary text-muted-foreground rounded-sm"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  {/* Top accent line on active */}
-                  <motion.div
-                    className="absolute top-0 left-0 right-0 h-px bg-primary"
-                    animate={{ scaleX: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.28 }}
-                    style={{ transformOrigin: "left" }}
-                  />
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="font-mono text-[10px] px-2 py-0.5 border border-border text-muted-foreground"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </motion.div>
-              );
-            })}
-          </div>
-        </ScrollReveal>
-      </div>
+
+                {/* Bottom accent line on active */}
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary"
+                  animate={{ scaleX: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.25 }}
+                  style={{ transformOrigin: "left" }}
+                />
+              </motion.div>
+            );
+          })}
+        </div>
+      </ScrollReveal>
     </section>
   );
 };
