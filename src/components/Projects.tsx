@@ -68,29 +68,41 @@ const Projects = () => {
         </ScrollReveal>
 
         <ScrollReveal delay={0.2}>
-          <div className="flex gap-3 h-[420px] sm:h-[480px]">
+          <div className="flex gap-2 h-[420px] sm:h-[480px]">
             {projects.map((project, i) => {
               const isActive = activeIndex === i;
               return (
                 <motion.div
                   key={project.title}
-                  className="relative rounded-sm overflow-hidden cursor-pointer border border-border group"
+                  className="relative overflow-hidden cursor-pointer border border-border group"
                   animate={{
                     flex: isActive ? 4 : 1,
                   }}
-                  transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
                   onMouseEnter={() => setActiveIndex(i)}
-                  style={{ minWidth: 0 }}
+                  style={{
+                    minWidth: 0,
+                    clipPath: "polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%)",
+                  }}
                 >
                   {/* Background */}
                   <div className="absolute inset-0 bg-card" />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
 
+                  {/* Diagonal accent line */}
+                  <motion.div
+                    className="absolute top-0 left-0 w-full h-full pointer-events-none"
+                    animate={{ opacity: isActive ? 1 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute top-0 left-[8%] w-px h-full bg-primary/30" style={{ transform: "rotate(0deg)" }} />
+                  </motion.div>
+
                   {/* Glow on active */}
                   <motion.div
-                    className="absolute inset-0 rounded-sm pointer-events-none"
+                    className="absolute inset-0 pointer-events-none"
                     animate={{ opacity: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.2 }}
                     style={{
                       boxShadow: "inset 0 0 40px hsl(72 100% 50% / 0.06), 0 0 30px hsl(72 100% 50% / 0.08)",
                     }}
@@ -100,7 +112,7 @@ const Projects = () => {
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center"
                     animate={{ opacity: isActive ? 0 : 1 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <span
                       className="font-display text-sm sm:text-base font-bold text-muted-foreground whitespace-nowrap tracking-wider"
@@ -118,7 +130,7 @@ const Projects = () => {
                   <motion.div
                     className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8"
                     animate={{ opacity: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.4, delay: isActive ? 0.15 : 0 }}
+                    transition={{ duration: 0.28, delay: isActive ? 0.1 : 0 }}
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground">
@@ -127,6 +139,8 @@ const Projects = () => {
                       <div className="flex gap-2 ml-auto">
                         <motion.a
                           href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           whileHover={{ scale: 1.2 }}
                           className="text-muted-foreground hover:text-primary transition-colors"
                           aria-label="GitHub"
@@ -134,15 +148,19 @@ const Projects = () => {
                         >
                           <Github size={18} />
                         </motion.a>
-                        <motion.a
-                          href={project.live}
-                          whileHover={{ scale: 1.2 }}
-                          className="text-muted-foreground hover:text-primary transition-colors"
-                          aria-label="Live Demo"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <ExternalLink size={18} />
-                        </motion.a>
+                        {project.live && (
+                          <motion.a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.2 }}
+                            className="text-muted-foreground hover:text-primary transition-colors"
+                            aria-label="Live Demo"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ExternalLink size={18} />
+                          </motion.a>
+                        )}
                       </div>
                     </div>
 
@@ -166,7 +184,7 @@ const Projects = () => {
                   <motion.div
                     className="absolute top-0 left-0 right-0 h-px bg-primary"
                     animate={{ scaleX: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.4 }}
+                    transition={{ duration: 0.28 }}
                     style={{ transformOrigin: "left" }}
                   />
                 </motion.div>
