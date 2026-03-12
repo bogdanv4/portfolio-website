@@ -39,13 +39,10 @@ const projects = [
 ];
 
 const Projects = () => {
-  const sectionRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const bgX = useTransform(scrollYProgress, [0, 1], [-40, 40]);
 
   return (
-    <section id="projects" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
+    <section id="projects" className="py-24 sm:py-32 relative overflow-hidden">
       <div className="container mx-auto px-6">
         <ScrollReveal direction="left">
           <span className="font-mono text-sm text-primary tracking-widest uppercase mb-4 block">
