@@ -1,7 +1,6 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { useState } from "react";
 import { ExternalLink, Github } from "lucide-react";
-import FloatingParticles from "./FloatingParticles";
 import ScrollReveal from "./ScrollReveal";
 
 const projects = [
