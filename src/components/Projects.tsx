@@ -10,32 +10,32 @@ const projects = [
     description:
       "Interactive web app featuring Google SSO and real-time map visualization of air quality data. Built as part of a 3-member team during my Grid Dynamics internship.",
     tags: ["React", "TypeScript", "Google SSO", "Maps API", "SCSS"],
-    live: "#",
-    github: "#",
+    live: "",
+    github: "https://github.com/bogdanv4/airo-capstone",
   },
   {
     title: "Angular Web Shop",
     description:
       "Full-featured e-commerce application with product listings, cart management, and responsive design. Developed during my frontend internship at Ingsoftware.",
     tags: ["Angular", "TypeScript", "Bootstrap", "REST API"],
-    live: "#",
-    github: "#",
+    live: "",
+    github: "https://github.com/bogdanv4/angular-shop-project",
   },
   {
     title: "AI Haiku",
     description:
       "An AI-powered haiku generator that creates unique poetry using machine learning. A fun side project exploring the intersection of creativity and technology.",
     tags: ["React", "TypeScript", "AI", "API"],
-    live: "#",
-    github: "#",
+    live: "",
+    github: "https://github.com/bogdanv4/ai-haiku",
   },
   {
     title: "Agencija Kozic",
     description:
       "A professional agency website with modern design, smooth animations, and responsive layout. Built for a real client with focus on performance and UX.",
     tags: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
-    live: "#",
-    github: "#",
+    live: "https://agencijakozic.rs/",
+    github: "https://github.com/bogdanv4/agencija-kozic",
   },
 ];
 
