@@ -96,6 +96,7 @@ const Projects = () => {
                 {/* Vertical title (collapsed state) */}
                 <motion.div
                   className="absolute inset-0 flex items-center justify-center"
+                  style={{ transform: "skewX(6deg)" }}
                   animate={{ opacity: isActive ? 0 : 1 }}
                   transition={{ duration: 0.15 }}
                 >
