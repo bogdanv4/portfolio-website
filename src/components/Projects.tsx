@@ -108,7 +108,7 @@ const ProjectCard = ({
 
 const Projects = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const isMobile = useIsMobile();
+  const isMobile = useIsSmallScreen();
 
   return (
     <section id="projects" className="py-24 sm:py-32 relative overflow-hidden">
