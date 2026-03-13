@@ -152,8 +152,8 @@ const Projects = () => {
                   style={{
                     minWidth: 0,
                     transform: "skewX(-6deg)",
-                    marginLeft: i === 0 ? "-2%" : "-1%",
-                    marginRight: i === projects.length - 1 ? "-2%" : 0,
+                    marginLeft: i === 0 ? "-4%" : "-1%",
+                    marginRight: i === projects.length - 1 ? "-4%" : 0,
                     overflow: "hidden",
                   }}
                 >
