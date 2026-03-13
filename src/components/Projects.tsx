@@ -58,19 +58,14 @@ const Projects = () => {
       </div>
 
       <ScrollReveal delay={0.2}>
-        <div className="flex h-[500px] sm:h-[560px] w-full">
+        <div className="flex h-[500px] sm:h-[560px] w-full overflow-hidden">
           {projects.map((project, i) => {
             const isActive = activeIndex === i;
-            const isFirst = i === 0;
-            const isLast = i === projects.length - 1;
-
-            // All cards get the same diagonal shape; straight edges only on outer sides
-            const clipPath = `polygon(${isFirst ? "0%" : "8%"} 0%, 100% 0%, ${isLast ? "100%" : "92%"} 100%, 0% 100%)`;
 
             return (
               <motion.div
                 key={project.title}
-                className="relative overflow-hidden cursor-pointer group"
+                className="relative cursor-pointer group"
                 animate={{
                   flex: isActive ? 5 : 1,
                 }}
@@ -78,9 +73,10 @@ const Projects = () => {
                 onMouseEnter={() => setActiveIndex(i)}
                 style={{
                   minWidth: 0,
-                  clipPath,
-                  marginLeft: isFirst ? 0 : "-4%",
-                  zIndex: isActive ? 2 : 1,
+                  transform: "skewX(-6deg)",
+                  marginLeft: i === 0 ? "-2%" : "-1%",
+                  marginRight: i === projects.length - 1 ? "-2%" : 0,
+                  overflow: "hidden",
                 }}
               >
                 {/* Background */}
