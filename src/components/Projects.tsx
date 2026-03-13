@@ -2,7 +2,17 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
-import { useEffect, useState as useReactState } from "react";
+
+function useIsSmallScreen() {
+  const [isSmall, setIsSmall] = useState(false);
+  useEffect(() => {
+    const check = () => setIsSmall(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isSmall;
+}
 
 function useIsSmallScreen() {
   const [isSmall, setIsSmall] = useReactState(false);
