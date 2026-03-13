@@ -115,6 +115,7 @@ const Projects = () => {
                 {/* Content (expanded state) */}
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-end p-8 sm:p-10"
+                  style={{ transform: "skewX(6deg)" }}
                   animate={{ opacity: isActive ? 1 : 0 }}
                   transition={{ duration: 0.2, delay: isActive ? 0.08 : 0 }}
                 >
