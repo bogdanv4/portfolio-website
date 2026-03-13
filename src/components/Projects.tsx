@@ -64,10 +64,8 @@ const Projects = () => {
             const isFirst = i === 0;
             const isLast = i === projects.length - 1;
 
-            // Build clip-path: first card has straight left edge, last has straight right edge
-            const leftTop = isFirst ? "0%" : "6%";
-            const rightBottom = isLast ? "100%" : "94%";
-            const clipPath = `polygon(${leftTop} 0%, 100% 0%, ${rightBottom} 100%, 0% 100%)`;
+            // All cards get the same diagonal shape; straight edges only on outer sides
+            const clipPath = `polygon(${isFirst ? "0%" : "8%"} 0%, 100% 0%, ${isLast ? "100%" : "92%"} 100%, 0% 100%)`;
 
             return (
               <motion.div
@@ -81,7 +79,8 @@ const Projects = () => {
                 style={{
                   minWidth: 0,
                   clipPath,
-                  marginLeft: isFirst ? 0 : "-3%",
+                  marginLeft: isFirst ? 0 : "-4%",
+                  zIndex: isActive ? 2 : 1,
                 }}
               >
                 {/* Background */}
