@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
 import { useEffect, useState as useReactState } from "react";
