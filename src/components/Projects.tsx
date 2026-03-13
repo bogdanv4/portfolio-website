@@ -14,16 +14,8 @@ function useIsSmallScreen() {
   return isSmall;
 }
 
-function useIsSmallScreen() {
-  const [isSmall, setIsSmall] = useReactState(false);
-  useEffect(() => {
-    const check = () => setIsSmall(window.innerWidth < 1024);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return isSmall;
-}
+
+
 
 const projects = [
   {
