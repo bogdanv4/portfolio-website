@@ -78,12 +78,12 @@ const TimelineNode = ({
           </div>
         </motion.div>
 
-        {/* Center dot */}
+        {/* Center dot - positioned on the line */}
         <motion.div
           initial={{ scale: 0 }}
           animate={inView ? { scale: 1 } : {}}
           transition={{ duration: 0.4, delay: index * 0.2 + 0.1 }}
-          className="absolute top-1/2 -translate-y-1/2 z-10 w-4 h-4 rounded-full border-2 border-primary bg-background flex items-center justify-center"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-4 h-4 rounded-full border-2 border-primary bg-background flex items-center justify-center"
         >
           <div className="w-1.5 h-1.5 rounded-full bg-primary" />
         </motion.div>
@@ -147,7 +147,7 @@ const Experience = () => {
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-16 tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-24 lg:mb-32 tracking-tight">
             Career Path<span className="text-primary">.</span>
           </h2>
         </ScrollReveal>
