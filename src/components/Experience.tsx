@@ -147,7 +147,7 @@ const Experience = () => {
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-16 tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-24 lg:mb-32 tracking-tight">
             Career Path<span className="text-primary">.</span>
           </h2>
         </ScrollReveal>
