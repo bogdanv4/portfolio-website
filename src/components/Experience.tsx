@@ -147,17 +147,17 @@ const Experience = () => {
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-24 lg:mb-32 tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-32 lg:mb-44 tracking-tight">
             Career Path<span className="text-primary">.</span>
           </h2>
         </ScrollReveal>
 
         {isLarge ? (
           /* Horizontal timeline */
-          <div className="relative">
+          <div className="relative h-[280px]">
             {/* Horizontal line */}
             <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-border -translate-y-1/2" />
-            <div className="flex">
+            <div className="flex h-full">
               {experiences.map((exp, i) => (
                 <TimelineNode key={exp.company} exp={exp} index={i} isLarge />
               ))}
