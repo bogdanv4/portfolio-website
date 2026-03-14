@@ -78,12 +78,12 @@ const TimelineNode = ({
           </div>
         </motion.div>
 
-        {/* Center dot */}
+        {/* Center dot - positioned on the line */}
         <motion.div
           initial={{ scale: 0 }}
           animate={inView ? { scale: 1 } : {}}
           transition={{ duration: 0.4, delay: index * 0.2 + 0.1 }}
-          className="absolute top-1/2 -translate-y-1/2 z-10 w-4 h-4 rounded-full border-2 border-primary bg-background flex items-center justify-center"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-4 h-4 rounded-full border-2 border-primary bg-background flex items-center justify-center"
         >
           <div className="w-1.5 h-1.5 rounded-full bg-primary" />
         </motion.div>
