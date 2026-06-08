@@ -140,7 +140,8 @@
 }
 .section-title .dot { color: var(--indigo); }
 
-section { position: relative; padding: clamp(90px, 13vw, 180px) 0; }
+#root section { position: relative; padding: clamp(90px, 13vw, 180px) 0; }
+section[aria-live] { padding: 0 !important; position: absolute !important; width: 0 !important; height: 0 !important; overflow: hidden !important; }
 
 .pf-cur {
   display: inline-block; width: 9px; height: 1.05em;
