@@ -1,82 +1,75 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from 'react';
 
-const Preloader = ({ onComplete }: { onComplete: () => void }) => {
-  const [phase, setPhase] = useState<"typing" | "exit">("typing");
-  const firstName = "Bogdan";
-  const lastName = "Vujić";
+interface Props { onComplete: () => void; }
+
+const LINES = [
+  { html: '<span class="pr">$</span> npm run portfolio', d: 60 },
+  { html: '<span class="ok" style="color:#9ece6a">✓</span> compiling components...', d: 420 },
+  { html: '<span class="ok" style="color:#9ece6a">✓</span> loading bogdan.vujic', d: 700 },
+  { html: '<span class="ok" style="color:#9ece6a">✓</span> mounting interface', d: 980 },
+  { html: '<span style="color:#22d3ee">→</span> ready.', d: 1260 },
+];
+
+const Preloader = ({ onComplete }: Props) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const progRef = useRef<HTMLElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const totalChars = firstName.length + lastName.length;
-    const typingDuration = totalChars * 120 + 600;
-    const timer = setTimeout(() => setPhase("exit"), typingDuration);
-    return () => clearTimeout(timer);
-  }, []);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const booted = sessionStorage.getItem('booted') === '1';
+
+    if (booted || reduced) {
+      rootRef.current?.classList.add('done');
+      const t = setTimeout(onComplete, 50);
+      return () => clearTimeout(t);
+    }
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    LINES.forEach(l => {
+      timers.push(setTimeout(() => {
+        if (!bodyRef.current) return;
+        const div = document.createElement('div');
+        div.className = 'boot-line';
+        div.innerHTML = l.html;
+        bodyRef.current.appendChild(div);
+      }, l.d));
+    });
+
+    let p = 0;
+    const pi = setInterval(() => {
+      p = Math.min(p + 3.2, 100);
+      if (progRef.current) progRef.current.style.width = p + '%';
+      if (p >= 100) clearInterval(pi);
+    }, 18);
+
+    timers.push(setTimeout(() => {
+      sessionStorage.setItem('booted', '1');
+      rootRef.current?.classList.add('done');
+      const t = setTimeout(onComplete, 600);
+      timers.push(t);
+    }, 1700));
+
+    return () => {
+      timers.forEach(clearTimeout);
+      clearInterval(pi);
+    };
+  }, [onComplete]);
 
   return (
-    <AnimatePresence onExitComplete={onComplete}>
-      {phase !== "exit" ? null : undefined}
-      <motion.div
-        key="preloader"
-        initial={{ opacity: 1 }}
-        animate={phase === "exit" ? { opacity: 0, scale: 0.95 } : { opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-        onAnimationComplete={() => {
-          if (phase === "exit") onComplete();
-        }}
-        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background"
-      >
-        {/* Subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage:
-              "linear-gradient(hsl(72 100% 50% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(72 100% 50% / 0.3) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
-
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="font-display text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[0.9]">
-            <span className="inline-flex">
-              {firstName.split("").map((char, i) => (
-                <motion.span
-                  key={`f-${i}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.08, delay: i * 0.12 }}
-                  className="inline-block"
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </span>
-            <br />
-            <span className="inline-flex text-gradient">
-              {lastName.split("").map((char, i) => (
-                <motion.span
-                  key={`l-${i}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.08, delay: (firstName.length + i) * 0.12 }}
-                  className="inline-block"
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </span>
-          </div>
-
-          {/* Blinking cursor */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 0.8, repeat: Infinity, delay: (firstName.length + lastName.length) * 0.12 }}
-            className="mt-6 w-6 h-[3px] bg-primary rounded-full"
-          />
+    <div id="pf-preloader" ref={rootRef}>
+      <div className="boot">
+        <div className="bar">
+          <i style={{ background: '#ff5f56' }} />
+          <i style={{ background: '#ffbd2e' }} />
+          <i style={{ background: '#27c93f' }} />
+          <span className="t">~/bogdan/portfolio</span>
         </div>
-      </motion.div>
-    </AnimatePresence>
+        <div className="body" ref={bodyRef} style={{ padding: '18px', minHeight: '150px' }} />
+        <div className="prog"><i ref={progRef} /></div>
+      </div>
+    </div>
   );
 };
 

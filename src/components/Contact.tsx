@@ -1,111 +1,146 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { Github, Linkedin, Mail, FileDown, ArrowUp } from "lucide-react";
-import FloatingParticles from "./FloatingParticles";
-import ScrollReveal from "./ScrollReveal";
+import { useRef, useCallback, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useFlowField } from '@/hooks/useFlowField';
+import { Github, Linkedin, Download, ArrowUp } from 'lucide-react';
 
-const Contact = () => {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const headingScale = useTransform(scrollYProgress, [0, 0.4], [0.85, 1]);
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+const LINES = ["LET'S WORK", 'TOGETHER.'];
 
-  const links = [
-    {
-      icon: <Mail size={20} />,
-      label: "vujic.bogdan@gmail.com",
-      href: "mailto:vujic.bogdan@gmail.com",
-    },
-    {
-      icon: <Github size={20} />,
-      label: "github.com/bogdanv4",
-      href: "https://github.com/bogdanv4",
-    },
-    {
-      icon: <Linkedin size={20} />,
-      label: "linkedin.com/in/bogdan-vujic",
-      href: "https://www.linkedin.com/in/bogdan-vujic",
-    },
-    {
-      icon: <FileDown size={20} />,
-      label: "Download CV",
-      href: "/Bogdan_Vujic_CV.pdf",
-      download: true,
-    },
-  ];
+function KineticText() {
+  const rootRef = useRef<HTMLHeadingElement>(null);
+  const fine = useRef(window.matchMedia('(pointer:fine)').matches);
+
+  const onMove = useCallback((e: React.MouseEvent) => {
+    if (!fine.current) return;
+    const root = rootRef.current;
+    if (!root) return;
+    const r = root.getBoundingClientRect();
+    const mx = (e.clientX - r.left) / r.width - 0.5;
+    const my = (e.clientY - r.top) / r.height - 0.5;
+    const chars = root.querySelectorAll<HTMLSpanElement>('.ch');
+    chars.forEach(c => {
+      const cr = c.getBoundingClientRect();
+      const ccx = (cr.left + cr.width / 2 - r.left) / r.width - 0.5;
+      c.style.transform = `translate(${-(ccx - mx) * 26}px, ${my * 20}px)`;
+    });
+  }, []);
+
+  const onLeave = useCallback(() => {
+    const chars = rootRef.current?.querySelectorAll<HTMLSpanElement>('.ch') ?? [];
+    chars.forEach(c => { c.style.transform = 'translate(0,0)'; });
+  }, []);
 
   return (
-    <section id="contact" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
-      <FloatingParticles />
-      <div className="container mx-auto px-6">
-        <ScrollReveal direction="left">
-          <span className="font-mono text-sm text-primary tracking-widest uppercase mb-4 block">
-            // Contact
-          </span>
-        </ScrollReveal>
-
-        <motion.h2
-          style={{ scale: headingScale, opacity: headingOpacity }}
-          className="font-display text-3xl sm:text-5xl font-bold mb-4 tracking-tight origin-left"
-        >
-          Let's work together<span className="text-primary">.</span>
-        </motion.h2>
-
-        <ScrollReveal delay={0.2}>
-          <p className="font-body text-lg text-secondary-foreground max-w-xl mb-12">
-            I'm actively looking for my next opportunity. Whether you have a role in mind
-            or just want to say hello — my inbox is always open.
-          </p>
-        </ScrollReveal>
-
-        <div className="flex flex-col sm:flex-row flex-wrap gap-4">
-          {links.map((link, i) => (
-            <ScrollReveal key={link.label} direction="left" delay={0.3 + i * 0.1}>
-              <motion.a
-                href={link.href}
-                download={link.download || undefined}
-                target={link.download ? undefined : "_blank"}
-                rel={link.download ? undefined : "noopener noreferrer"}
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.97 }}
-                className="group inline-flex items-center gap-3 font-mono text-sm text-secondary-foreground border border-border rounded-sm px-5 py-3 hover:border-primary hover:text-primary transition-all duration-200"
-              >
-                <span className="text-muted-foreground group-hover:text-primary transition-colors">
-                  {link.icon}
-                </span>
-                {link.label}
-              </motion.a>
-            </ScrollReveal>
-          ))}
-        </div>
-      </div>
-
-      {/* Footer */}
-      <ScrollReveal delay={0.6}>
-        <div className="container mx-auto px-6 mt-24 pt-8 border-t border-border">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="font-mono text-xs text-muted-foreground">
-              © {new Date().getFullYear()} Bogdan Vujić. Built with React & passion.
-            </span>
-            <span className="font-mono text-xs text-muted-foreground inline-flex items-center gap-1.5">
-              Serbia <span className="text-base leading-[1] translate-y-[-1px]">🇷🇸</span>
-            </span>
-          </div>
-          <div className="flex justify-center mt-8">
-            <motion.button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="group flex flex-col items-center gap-2 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+    <h2 className="cta-kinetic" ref={rootRef} onMouseMove={onMove} onMouseLeave={onLeave}>
+      {LINES.map((line, li) => (
+        <span key={li} className="line">
+          {[...line].map((ch, ci) => (
+            <span
+              key={ci}
+              className="ch"
+              style={{ animationDelay: `${((li * line.length + ci) % 7) * 0.22}s` }}
             >
-              <span className="w-10 h-10 rounded-full border border-border group-hover:border-primary flex items-center justify-center transition-colors">
-                <ArrowUp size={16} />
-              </span>
-              Back to top
-            </motion.button>
+              {ch === ' ' ? ' ' : ch}
+            </span>
+          ))}
+        </span>
+      ))}
+    </h2>
+  );
+}
+
+function useMagnetic() {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const onMove = useCallback((e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.transform = `translate(${(e.clientX-(r.left+r.width/2))*0.35}px,${(e.clientY-(r.top+r.height/2))*0.35}px)`;
+  }, []);
+  const onLeave = useCallback(() => { if (ref.current) ref.current.style.transform = ''; }, []);
+  return { ref, onMove, onLeave };
+}
+
+const Contact = () => {
+  const flowRef = useRef<HTMLCanvasElement>(null);
+  useFlowField(flowRef);
+  const emailMag = useMagnetic();
+
+  useEffect(() => {
+    const btn = document.getElementById('pf-totop');
+    if (!btn) return;
+    const onClick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    btn.addEventListener('click', onClick);
+    return () => btn.removeEventListener('click', onClick);
+  }, []);
+
+  return (
+    <section id="contact" className="pf-contact">
+      <canvas className="contact-flow" ref={flowRef} />
+      <div className="pf-container" style={{ position: 'relative', zIndex: 1 }}>
+        <motion.span
+          className="eyebrow cta-eyebrow"
+          initial={{ opacity: 0, x: -34 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <span className="dot" /> Let's build something
+        </motion.span>
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <KineticText />
+        </motion.div>
+
+        <motion.a
+          className="cta-email"
+          href="mailto:vujicbogdan@gmail.com"
+          ref={emailMag.ref}
+          onMouseMove={emailMag.onMove}
+          onMouseLeave={emailMag.onLeave}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
+          vujicbogdan@gmail.com <span className="ar">↗</span>
+        </motion.a>
+
+        <motion.div
+          className="cta-socials"
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <a className="cta-soc" href="https://github.com/bogdanv4" target="_blank" rel="noopener noreferrer">
+            <Github size={20} /> GitHub
+          </a>
+          <a className="cta-soc" href="https://www.linkedin.com/in/bogdan-vujic" target="_blank" rel="noopener noreferrer">
+            <Linkedin size={20} /> LinkedIn
+          </a>
+          <a className="cta-soc" href="/Bogdan_Vujic_CV.pdf" download>
+            <Download size={20} /> Download CV
+          </a>
+        </motion.div>
+
+        <footer>
+          <div className="foot-row">
+            <span>© {new Date().getFullYear()} Bogdan Vujić. Built with care &amp; caffeine.</span>
+            <span>Belgrade, Serbia 🇷🇸</span>
           </div>
-        </div>
-      </ScrollReveal>
+          <button className="totop" id="pf-totop">
+            <span className="circ">
+              <ArrowUp size={15} />
+            </span>
+            Back to top
+          </button>
+        </footer>
+      </div>
     </section>
   );
 };

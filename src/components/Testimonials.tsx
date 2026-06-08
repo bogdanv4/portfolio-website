@@ -1,171 +1,113 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useCallback, useEffect, useState } from "react";
-import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
-import useEmblaCarousel from "embla-carousel-react";
-import FloatingParticles from "./FloatingParticles";
-import ScrollReveal from "./ScrollReveal";
+import { motion } from 'framer-motion';
 
-const testimonials = [
-  {
-    name: "Ana Petrović",
-    role: "Senior Developer, Grid Dynamics",
-    quote:
-      "Bogdan picks up new concepts remarkably fast. His attention to detail in UI implementation and willingness to take on complex tasks set him apart from other interns I've worked with.",
-  },
-  {
-    name: "Marko Nikolić",
-    role: "Team Lead, Ingsoftware",
-    quote:
-      "What impressed me most was Bogdan's ability to work independently. He delivered both projects on time with clean, well-structured code. A genuinely self-driven developer.",
-  },
-  {
-    name: "Prof. Jelena Đorđević",
-    role: "Faculty of Organizational Sciences",
-    quote:
-      "Bogdan brought real enthusiasm to teaching web development. Students responded well to his practical approach, and his materials were always thorough and up-to-date.",
-  },
-  {
-    name: "Stefan Jovanović",
-    role: "Project Manager, Levi9",
-    quote:
-      "Bogdan consistently demonstrated strong problem-solving skills and a collaborative spirit. He communicated clearly with the team and always delivered quality work ahead of schedule.",
-  },
+const TESTIMONIALS = [
+  { name: 'Ana Petrović', role: 'Senior Developer, Grid Dynamics', quote: "Bogdan picks up new concepts remarkably fast. His attention to detail in UI implementation and willingness to take on complex tasks set him apart from other interns I've worked with." },
+  { name: 'Marko Nikolić', role: 'Team Lead, Ingsoftware', quote: "What impressed me most was Bogdan's ability to work independently. He delivered both projects on time with clean, well-structured code. A genuinely self-driven developer." },
+  { name: 'Prof. Jelena Đorđević', role: 'Faculty of Organizational Sciences', quote: "Bogdan brought real enthusiasm to teaching web development. Students responded well to his practical approach, and his materials were always thorough and up-to-date." },
+  { name: 'Stefan Jovanović', role: 'Project Manager, Levi9', quote: "Bogdan consistently demonstrated strong problem-solving skills and a collaborative spirit. He communicated clearly with the team and always delivered quality work ahead of schedule." },
 ];
 
-const Testimonials = () => {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const headingX = useTransform(scrollYProgress, [0, 0.4], [80, 0]);
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+const TW_GRAD: [string, string][] = [
+  ['#6366f1', '#22d3ee'],
+  ['#a855f7', '#6366f1'],
+  ['#22d3ee', '#9ece6a'],
+  ['#818cf8', '#a855f7'],
+];
+const TW_HASH = ['a3f9c2e', '7d11b04', 'e82c5fa', '4b6a9d1'];
+const TW_AGO = ['2 days ago', 'last week', '3 weeks ago', 'last month'];
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
-    };
-  }, [emblaApi, onSelect]);
-
-  // Autoplay
-  useEffect(() => {
-    if (!emblaApi) return;
-    const interval = setInterval(() => {
-      emblaApi.scrollNext();
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [emblaApi]);
-
+function TwCard({ t, i }: { t: typeof TESTIMONIALS[0]; i: number }) {
+  const initials = t.name.split(' ').map(n => n[0]).slice(0, 2).join('');
+  const [a, b] = TW_GRAD[i % TW_GRAD.length];
   return (
-    <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden" ref={sectionRef}>
-      <FloatingParticles />
-      <div className="container mx-auto px-6">
-        <motion.div
-          style={{ x: headingX, opacity: headingOpacity }}
-          className="mb-4"
-        >
-          <span className="font-mono text-sm text-primary tracking-widest uppercase">
-            // Testimonials
-          </span>
-        </motion.div>
-
-        <div className="flex items-end justify-between mb-12">
-          <ScrollReveal delay={0.1}>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-              Kind Words<span className="text-primary">.</span>
-            </h2>
-          </ScrollReveal>
-
-          <div className="flex gap-2">
-            <button
-              onClick={scrollPrev}
-              className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors disabled:opacity-30"
-              disabled={!canScrollPrev}
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={scrollNext}
-              className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors disabled:opacity-30"
-              disabled={!canScrollNext}
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
+    <article className="tw-card">
+      <header className="tw-top">
+        <div className="tw-av" style={{ background: `linear-gradient(135deg,${a},${b})` }}>{initials}</div>
+        <div className="tw-id">
+          <div className="tw-nm">{t.name}</div>
+          <div className="tw-rl">{t.role}</div>
         </div>
-
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex -ml-4">
-            {testimonials.map((t, i) => (
-              <div
-                key={t.name}
-                className="min-w-0 shrink-0 grow-0 basis-full md:basis-1/2 lg:basis-1/3 pl-4"
-              >
-                <motion.div
-                  whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.2 } }}
-                  className="bg-card border border-border rounded-sm p-6 relative group h-full"
-                >
-                  <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none glow-accent" />
-
-                  <motion.div
-                    whileHover={{ rotate: 12, scale: 1.1 }}
-                    className="inline-block"
-                  >
-                    <Quote size={20} className="text-primary/30 mb-4" />
-                  </motion.div>
-                  <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-6 italic relative z-10">
-                    "{t.quote}"
-                  </p>
-                  <div className="border-t border-border pt-4 relative z-10">
-                    <div className="font-display text-sm font-semibold text-foreground">
-                      {t.name}
-                    </div>
-                    <div className="font-mono text-xs text-muted-foreground mt-0.5">
-                      {t.role}
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Dots */}
-        <div className="flex justify-center gap-2 mt-8">
-          {testimonials.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => emblaApi?.scrollTo(i)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                i === selectedIndex
-                  ? "bg-primary w-6"
-                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-              }`}
-              aria-label={`Go to slide ${i + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
+        <span className="tw-appr"><span className="ic">✓</span> approved</span>
+      </header>
+      <p className="tw-quote">{t.quote}</p>
+      <footer className="tw-foot">
+        <span className="tw-hash">#{TW_HASH[i % TW_HASH.length]}</span>
+        <span className="tw-ago">reviewed · {TW_AGO[i % TW_AGO.length]}</span>
+      </footer>
+    </article>
   );
-};
+}
+
+function TwCol({ indices, reversed }: { indices: number[]; reversed?: boolean }) {
+  const cards = indices.map(i => <TwCard key={i} t={TESTIMONIALS[i]} i={i} />);
+  return (
+    <div className={`tw-col ${reversed ? 'rev' : ''}`}>
+      <div className="tw-coltrack">
+        {cards}
+        {cards}
+      </div>
+    </div>
+  );
+}
+
+const Testimonials = () => (
+  <section id="testimonials">
+    <div className="pf-container">
+      <div className="tw-head">
+        <div>
+          <motion.div
+            initial={{ opacity: 0, x: -34 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            style={{ marginBottom: 16 }}
+          >
+            <span className="section-tag"><span className="idx">04</span> Testimonials</span>
+          </motion.div>
+          <motion.h2
+            className="section-title"
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            Peer reviews<span className="dot">.</span>
+          </motion.h2>
+        </div>
+
+        <motion.div
+          className="tw-approved"
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
+          <span className="appr-ring">
+            <svg viewBox="0 0 36 36">
+              <circle className="ring-bg" cx="18" cy="18" r="15.5" />
+              <circle className="ring-fg" cx="18" cy="18" r="15.5" />
+            </svg>
+            <span className="appr-chk">✓</span>
+          </span>
+          <div className="appr-txt">
+            <b><span>{TESTIMONIALS.length}</span> approvals</b>
+            <span>merged to main</span>
+          </div>
+        </motion.div>
+      </div>
+
+      <motion.div
+        className="tw-wall"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.15 }}
+      >
+        <TwCol indices={[0, 1, 2, 3]} />
+        <TwCol indices={[2, 3, 0, 1]} reversed />
+      </motion.div>
+    </div>
+  </section>
+);
 
 export default Testimonials;
