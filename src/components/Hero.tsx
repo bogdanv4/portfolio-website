@@ -5,8 +5,8 @@ import { useWaveDots } from '@/hooks/useWaveDots';
 const ROLES = ['Frontend Engineer', 'React Developer', 'UI Craftsman', 'TypeScript Dev'];
 
 const STATS = [
-  { count: 4, label: 'Positions' },
-  { count: 4, label: 'Projects' },
+  { count: 5, label: 'Positions' },
+  { count: 10, suffix: '+', label: 'Projects' },
   { count: 3, suffix: '+', label: 'Yrs Coding' },
 ];
 
@@ -81,9 +81,9 @@ const Hero = () => {
   const btn1 = useMagnetic();
   const btn2 = useMagnetic();
 
-  const stat0 = useCounter(STATS[0].count);
-  const stat1 = useCounter(STATS[1].count);
-  const stat2 = useCounter(STATS[2].count, '+');
+  const stat0 = useCounter(STATS[0].count, STATS[0].suffix);
+  const stat1 = useCounter(STATS[1].count, STATS[1].suffix);
+  const stat2 = useCounter(STATS[2].count, STATS[2].suffix);
 
   useEffect(() => {
     const host = codeRef.current;
