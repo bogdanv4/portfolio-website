@@ -17,7 +17,7 @@ const Index = () => {
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       <div className={loading ? "overflow-hidden h-screen" : ""} style={{ minHeight: '100vh' }}>
         <Navbar />
-        <Hero />
+        <Hero ready={!loading} />
         <About />
         <Marquee />
         <Projects />
