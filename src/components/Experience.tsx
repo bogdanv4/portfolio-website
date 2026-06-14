@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 
 const EXPERIENCE = [
+  { year: 'Apr 2026 — Present', position: 'Junior Frontend Developer', company: 'Tyllo' },
   { year: 'Jan 2026 — Present', position: 'Frontend Developer Specialization', company: 'EPAM Systems' },
   { year: 'Mar 2025 — Sep 2025', position: 'Software Engineer Intern', company: 'Grid Dynamics' },
   { year: 'Oct 2024 — Dec 2024', position: 'Frontend Developer Intern', company: 'Ingsoftware' },
@@ -38,7 +39,7 @@ const Experience = () => (
             transition={{ duration: 0.7, delay: 0.08 }}
             style={{ color: 'var(--muted)', marginTop: 22, maxWidth: '26ch', fontSize: 15 }}
           >
-            Four roles across product engineering, client work, and teaching — each one sharpened a different edge.
+            Five roles across product engineering, client work, and teaching — each one sharpened a different edge.
           </motion.p>
         </div>
 
