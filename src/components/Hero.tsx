@@ -10,9 +10,10 @@ const STATS = [
   { count: 3, suffix: '+', label: 'Yrs Coding' },
 ];
 
-function useTyped(words: string[]) {
+function useTyped(words: string[], start: boolean) {
   const [text, setText] = useState('');
   useEffect(() => {
+    if (!start) return;
     let wi = 0, ci = 0, del = false, timer: ReturnType<typeof setTimeout>;
     function tick() {
       const word = words[wi];
@@ -28,16 +29,16 @@ function useTyped(words: string[]) {
     }
     tick();
     return () => clearTimeout(timer);
-  }, [words]);
+  }, [words, start]);
   return text;
 }
 
-function useCounter(target: number, suffix = '') {
+function useCounter(target: number, suffix = '', start = false) {
   const [val, setVal] = useState('0' + suffix);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !start) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
       observer.disconnect();
@@ -52,7 +53,7 @@ function useCounter(target: number, suffix = '') {
     }, { threshold: 0.6 });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target, suffix]);
+  }, [target, suffix, start]);
   return { val, ref };
 }
 
@@ -68,12 +69,14 @@ function useMagnetic() {
   return { ref, onMove, onLeave };
 }
 
-const Hero = () => {
+interface Props { ready: boolean; }
+
+const Hero = ({ ready }: Props) => {
   const heroRef = useRef<HTMLElement>(null);
   const fieldRef = useRef<HTMLCanvasElement>(null);
   const auroraRef = useRef<HTMLCanvasElement>(null);
   const codeRef = useRef<HTMLDivElement>(null);
-  const typed = useTyped(ROLES);
+  const typed = useTyped(ROLES, ready);
 
   useWaveDots(fieldRef);
   useAurora(auroraRef);
@@ -81,13 +84,13 @@ const Hero = () => {
   const btn1 = useMagnetic();
   const btn2 = useMagnetic();
 
-  const stat0 = useCounter(STATS[0].count, STATS[0].suffix);
-  const stat1 = useCounter(STATS[1].count, STATS[1].suffix);
-  const stat2 = useCounter(STATS[2].count, STATS[2].suffix);
+  const stat0 = useCounter(STATS[0].count, STATS[0].suffix, ready);
+  const stat1 = useCounter(STATS[1].count, STATS[1].suffix, ready);
+  const stat2 = useCounter(STATS[2].count, STATS[2].suffix, ready);
 
   useEffect(() => {
     const host = codeRef.current;
-    if (!host) return;
+    if (!host || !ready) return;
     const lines = host.querySelectorAll<HTMLDivElement>('.ln');
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
@@ -96,7 +99,7 @@ const Hero = () => {
     }, { threshold: 0.25 });
     observer.observe(host);
     return () => observer.disconnect();
-  }, []);
+  }, [ready]);
 
   return (
     <header id="hero" className="pf-hero" ref={heroRef}>
