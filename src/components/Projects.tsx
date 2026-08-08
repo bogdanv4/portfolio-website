@@ -15,9 +15,9 @@ const SLOT_ACCENT: [string, string][] = [
 ];
 
 const PROJECTS = [
+  { title: 'Finance Tracker', context: 'Full-Stack Side Project — Live', stack: 'Next.js · TypeScript · Supabase', display: 'finance-tracker-three-lake-17.vercel.app', url: 'https://finance-tracker-three-lake-17.vercel.app/', cta: 'Visit live' },
   { title: 'Air Pollution Tracker', context: 'Grid Dynamics — Capstone', stack: 'React · TypeScript · Maps API', display: 'github.com/bogdanv4/airo-capstone', url: 'https://github.com/bogdanv4/airo-capstone', cta: 'View code' },
   { title: 'Angular Web Shop', context: 'Ingsoftware — Internship', stack: 'Angular · TypeScript · Bootstrap', display: 'github.com/bogdanv4/angular-shop-project', url: 'https://github.com/bogdanv4/angular-shop-project', cta: 'View code' },
-  { title: 'AI Haiku', context: 'Side Project', stack: 'React · TypeScript · AI', display: 'github.com/bogdanv4/ai-haiku', url: 'https://github.com/bogdanv4/ai-haiku', cta: 'View code' },
   { title: 'Agencija Kozic', context: 'Client Work — Live', stack: 'React · Tailwind · Framer Motion', display: 'agencijakozic.rs', url: 'https://agencijakozic.rs/', cta: 'Visit live' },
 ];
 

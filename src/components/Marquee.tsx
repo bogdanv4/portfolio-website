@@ -1,4 +1,4 @@
-const ITEMS = ['React', 'TypeScript', 'Next.js', 'Vue', 'Angular', 'Node.js', 'SCSS', 'Figma', 'Claude', 'Cursor', 'Lovable'];
+const ITEMS = ['React', 'TypeScript', 'Next.js', 'Vue', 'Angular', 'Node.js', 'Supabase', 'SCSS', 'Figma', 'Claude', 'Cursor', 'Lovable'];
 
 const Marquee = () => (
   <div className="pf-marquee">
