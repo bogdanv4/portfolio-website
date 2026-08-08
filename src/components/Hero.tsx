@@ -5,7 +5,7 @@ import { useWaveDots } from '@/hooks/useWaveDots';
 const ROLES = ['Frontend Engineer', 'React Developer', 'UI Craftsman', 'TypeScript Dev'];
 
 const STATS = [
-  { count: 5, label: 'Positions' },
+  { count: 5, suffix: '+', label: 'Positions' },
   { count: 10, suffix: '+', label: 'Projects' },
   { count: 3, suffix: '+', label: 'Yrs Coding' },
 ];
