@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 const SLOT_GRADIENTS = [
@@ -31,18 +31,12 @@ function ArrowIcon() {
 
 const Projects = () => {
   const [active, setActive] = useState(0);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const idxRef = useRef<HTMLDivElement>(null);
-
   const isPointerFine = useRef(window.matchMedia('(pointer:fine)').matches);
+  const [ctaVisible, setCtaVisible] = useState(!isPointerFine.current);
 
-  const showCta = useCallback(() => { stageRef.current?.classList.add('show-cta'); }, []);
-  const hideCta = useCallback(() => { stageRef.current?.classList.remove('show-cta'); }, []);
-
-  useEffect(() => {
-    if (!isPointerFine.current) {
-      stageRef.current?.classList.add('show-cta');
-    }
+  const showCta = useCallback(() => { setCtaVisible(true); }, []);
+  const hideCta = useCallback(() => {
+    if (isPointerFine.current) setCtaVisible(false);
   }, []);
 
   const activeProject = PROJECTS[active];
@@ -73,16 +67,19 @@ const Projects = () => {
           </div>
         </div>
 
-        <div className="proj-layout">
+        <div
+          className="proj-layout"
+          onMouseEnter={showCta}
+          onMouseLeave={hideCta}
+          onFocus={showCta}
+          onBlur={hideCta}
+        >
           <motion.div
             className="proj-index"
-            ref={idxRef}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            onMouseEnter={showCta}
-            onMouseLeave={hideCta}
           >
             {PROJECTS.map((p, i) => (
               <a
@@ -93,7 +90,6 @@ const Projects = () => {
                 rel="noopener noreferrer"
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
-                onClick={e => { if (window.innerWidth >= 1000) e.preventDefault(); }}
               >
                 <span className="pr-idx">0{i + 1}</span>
                 <div className="pr-main">
@@ -109,8 +105,7 @@ const Projects = () => {
           </motion.div>
 
           <motion.div
-            className="proj-stage"
-            ref={stageRef}
+            className={`proj-stage ${ctaVisible ? 'show-cta' : ''}`}
             initial={{ opacity: 0, x: 34 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
