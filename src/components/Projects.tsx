@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useAutoCycle } from '@/hooks/useAutoCycle';
 
 const SLOT_GRADIENTS = [
   'linear-gradient(135deg, #1a1b2e 0%, #0f1629 40%, #181030 100%)',
@@ -7,19 +8,25 @@ const SLOT_GRADIENTS = [
   'linear-gradient(135deg, #18101e 0%, #0f1a2e 40%, #0a1520 100%)',
   'linear-gradient(135deg, #0a1420 0%, #101628 40%, #1a1230 100%)',
 ];
-const SLOT_ACCENT: [string, string][] = [
-  ['#6366f1', '#818cf8'],
-  ['#22d3ee', '#6366f1'],
-  ['#a855f7', '#22d3ee'],
-  ['#22d3ee', '#9ece6a'],
+const PROJECTS = [
+  { slug: 'finance-tracker', title: 'Finance Tracker', context: 'Full-Stack Side Project — Live', stack: 'Next.js · TypeScript · Supabase', display: 'finance-tracker-three-lake-17.vercel.app', url: 'https://finance-tracker-three-lake-17.vercel.app/', cta: 'Visit live' },
+  { slug: 'air-pollution-tracker', title: 'Air Pollution Tracker', context: 'Grid Dynamics — Capstone', stack: 'React · TypeScript · Maps API', display: 'github.com/bogdanv4/airo-capstone', url: 'https://github.com/bogdanv4/airo-capstone', cta: 'View code' },
+  { slug: 'angular-web-shop', title: 'Angular Web Shop', context: 'Ingsoftware — Internship', stack: 'Angular · TypeScript · Bootstrap', display: 'github.com/bogdanv4/angular-shop-project', url: 'https://github.com/bogdanv4/angular-shop-project', cta: 'View code' },
+  { slug: 'agencija-kozic', title: 'Agencija Kozic', context: 'Client Work — Live', stack: 'React · Tailwind · Framer Motion', display: 'agencijakozic.rs', url: 'https://agencijakozic.rs/', cta: 'Visit live' },
 ];
 
-const PROJECTS = [
-  { title: 'Finance Tracker', context: 'Full-Stack Side Project — Live', stack: 'Next.js · TypeScript · Supabase', display: 'finance-tracker-three-lake-17.vercel.app', url: 'https://finance-tracker-three-lake-17.vercel.app/', cta: 'Visit live' },
-  { title: 'Air Pollution Tracker', context: 'Grid Dynamics — Capstone', stack: 'React · TypeScript · Maps API', display: 'github.com/bogdanv4/airo-capstone', url: 'https://github.com/bogdanv4/airo-capstone', cta: 'View code' },
-  { title: 'Angular Web Shop', context: 'Ingsoftware — Internship', stack: 'Angular · TypeScript · Bootstrap', display: 'github.com/bogdanv4/angular-shop-project', url: 'https://github.com/bogdanv4/angular-shop-project', cta: 'View code' },
-  { title: 'Agencija Kozic', context: 'Client Work — Live', stack: 'React · Tailwind · Framer Motion', display: 'agencijakozic.rs', url: 'https://agencijakozic.rs/', cta: 'Visit live' },
-];
+const SHOTS = import.meta.glob('../assets/shots/*.{png,jpg,jpeg,webp,avif}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
+function shotFor(slug: string) {
+  const entry = Object.entries(SHOTS).find(([path]) => path.includes(`/${slug}.`));
+  return entry?.[1];
+}
+
+const CYCLE_INTERVAL_MS = 5000;
 
 function ArrowIcon() {
   return (
@@ -29,20 +36,81 @@ function ArrowIcon() {
   );
 }
 
+function StageUrl({ text }: { text: string }) {
+  const [shown, setShown] = useState(text);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      setShown(text);
+      return;
+    }
+
+    clearTimeout(timerRef.current);
+    setTyping(true);
+    setShown('');
+    const step = Math.max(50, 800 / Math.max(1, text.length));
+    let i = 0;
+    const tick = () => {
+      i += 1;
+      setShown(text.slice(0, i));
+      if (i < text.length) {
+        timerRef.current = setTimeout(tick, step);
+      } else {
+        setTyping(false);
+      }
+    };
+    timerRef.current = setTimeout(tick, step);
+
+    return () => clearTimeout(timerRef.current);
+  }, [text]);
+
+  return (
+    <span className="stage-url">
+      {shown}
+      {typing && <i className="stage-caret" />}
+    </span>
+  );
+}
+
 const Projects = () => {
-  const [active, setActive] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const progressRef = useRef<HTMLElement>(null);
   const isPointerFine = useRef(window.matchMedia('(pointer:fine)').matches);
   const [ctaVisible, setCtaVisible] = useState(!isPointerFine.current);
+  const [hovered, setHovered] = useState(false);
+  const [showStage, setShowStage] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1001px)').matches
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia('(min-width: 1001px)');
+    const onChange = () => setShowStage(mql.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+
+  const { index: active, select } = useAutoCycle({
+    count: PROJECTS.length,
+    intervalMs: CYCLE_INTERVAL_MS,
+    paused: hovered,
+    rootRef: sectionRef,
+    progressRef,
+  });
 
   const showCta = useCallback(() => { setCtaVisible(true); }, []);
   const hideCta = useCallback(() => {
     if (isPointerFine.current) setCtaVisible(false);
   }, []);
+  const onEnter = useCallback(() => { showCta(); setHovered(true); }, [showCta]);
+  const onLeave = useCallback(() => { hideCta(); setHovered(false); }, [hideCta]);
 
   const activeProject = PROJECTS[active];
 
   return (
-    <section id="projects">
+    <section id="projects" ref={sectionRef}>
       <div className="pf-container">
         <div className="proj-head">
           <div>
@@ -69,10 +137,10 @@ const Projects = () => {
 
         <div
           className="proj-layout"
-          onMouseEnter={showCta}
-          onMouseLeave={hideCta}
-          onFocus={showCta}
-          onBlur={hideCta}
+          onMouseEnter={onEnter}
+          onMouseLeave={onLeave}
+          onFocus={onEnter}
+          onBlur={onLeave}
         >
           <motion.div
             className="proj-index"
@@ -88,8 +156,8 @@ const Projects = () => {
                 href={p.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
+                onMouseEnter={() => select(i)}
+                onFocus={() => select(i)}
               >
                 <span className="pr-idx">0{i + 1}</span>
                 <div className="pr-main">
@@ -104,57 +172,62 @@ const Projects = () => {
             ))}
           </motion.div>
 
-          <motion.div
-            className={`proj-stage ${ctaVisible ? 'show-cta' : ''}`}
-            initial={{ opacity: 0, x: 34 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="stage-win">
-              <div className="stage-bar">
-                <i style={{ background: '#ff5f56' }} />
-                <i style={{ background: '#ffbd2e' }} />
-                <i style={{ background: '#27c93f' }} />
-                <span className="stage-url">{activeProject.display}</span>
-              </div>
-              <div className="stage-body">
-                {PROJECTS.map((p, i) => (
-                  <div
-                    key={i}
-                    className={`stage-slot ${active === i ? 'on' : ''}`}
-                    style={{ background: SLOT_GRADIENTS[i] }}
-                  >
-                    <div className="stage-slot-inner">
+          {showStage && (
+            <motion.div
+              className={`proj-stage ${ctaVisible ? 'show-cta' : ''}`}
+              aria-hidden="true"
+              initial={{ opacity: 0, x: 34 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="stage-win">
+                <div className="stage-bar">
+                  <i style={{ background: '#ff5f56' }} />
+                  <i style={{ background: '#ffbd2e' }} />
+                  <i style={{ background: '#27c93f' }} />
+                  <StageUrl text={activeProject.display} />
+                </div>
+                <div className="stage-progress"><i ref={progressRef} /></div>
+                <div className="stage-body">
+                  {PROJECTS.map((p, i) => {
+                    const shot = shotFor(p.slug);
+                    return (
                       <div
-                        className="stage-slot-num"
-                        style={{
-                          background: `linear-gradient(90deg, ${SLOT_ACCENT[i][0]}, ${SLOT_ACCENT[i][1]})`,
-                          WebkitBackgroundClip: 'text',
-                          backgroundClip: 'text',
-                          color: 'transparent',
-                          fontWeight: 700,
-                        }}
+                        key={i}
+                        className={`stage-slot ${active === i ? 'on' : ''}`}
+                        style={{ background: SLOT_GRADIENTS[i] }}
                       >
-                        /{String(i + 1).padStart(2, '0')}
+                        {shot && (
+                          <>
+                            <img
+                              className="stage-shot"
+                              src={shot}
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div className="stage-scrim" />
+                          </>
+                        )}
+                        <div className="stage-glow" />
                       </div>
-                      <div className="stage-slot-title">{p.title}</div>
-                      <div className="stage-slot-stack">{p.stack}</div>
-                    </div>
-                    <div className="stage-glow" />
-                  </div>
-                ))}
-                <a
-                  className="stage-cta"
-                  href={activeProject.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>{activeProject.cta}</span> ↗
-                </a>
+                    );
+                  })}
+                  <a
+                    className="stage-cta"
+                    href={activeProject.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    tabIndex={-1}
+                  >
+                    <span>{activeProject.cta}</span> ↗
+                  </a>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>
